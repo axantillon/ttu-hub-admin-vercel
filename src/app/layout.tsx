@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/shadcn/toaster";
 import { GlobalProviders } from "@/lib/providers";
 import "@/lib/styles/globals.css";
 import { cn } from "@/lib/utils/cn";
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className="relative h-dvh w-dvw">
         <Analytics />
         <SpeedInsights />
+        <Toaster />
 
         <GlobalProviders>{children}</GlobalProviders>
       </body>

@@ -1,7 +1,9 @@
 export enum NavPath {
-  HOME = "/",
+  DASHBOARD = "/",
   LOGIN = "/login",
-
+  ORGS = "/orgs",
+  EVENTS = "/events",
+  USERS = "/users",
 }
 
 export enum DegreeKeys {

@@ -49,3 +49,14 @@ export async function internalUpdateUserByUsername(
 
   return user;
 }
+
+export async function deleteUserByUsername(username: string) {
+  console.log("deleting user by username");
+  const user = await prisma.user.delete({
+    where: {
+      username,
+    },
+  });
+
+  return user;
+}

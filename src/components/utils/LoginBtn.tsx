@@ -20,7 +20,7 @@ const LoginBtn: FC<LoginBtnProps> = ({}) => {
       setLoading(true);
       setPrevAuth(true);
 
-      router.push(NavPath.HOME);
+      router.push(NavPath.DASHBOARD);
     },
 
     onError: (error) => {
