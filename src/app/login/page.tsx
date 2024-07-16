@@ -15,8 +15,7 @@ export default function Login() {
         />
       </div>
       <span className="text-lg font-bold text-center mb-4">
-        Welcome to <b>TTU@CR HUB,</b> <br />
-        <span className="text-accent">Red Raider</span>!
+        Welcome to the <b>TTU@CR HUB,</b> Admin Dashboard!
       </span>
       <LoginBtn />
     </main>

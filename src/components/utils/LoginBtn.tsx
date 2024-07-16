@@ -1,7 +1,5 @@
 "use client";
-import { createUser } from "@/db/users";
 import { NavPath } from "@/lib/types";
-import { extractUsername, isTTUEmail } from "@/lib/utils";
 import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
@@ -18,7 +16,7 @@ const LoginBtn: FC<LoginBtnProps> = ({}) => {
   const router = useRouter();
 
   const { login } = useLogin({
-    onComplete: async (user, isNewUser) => {
+    onComplete: () => {
       setLoading(true);
       setPrevAuth(true);
 

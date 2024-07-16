@@ -1,6 +1,6 @@
-import { SelectOption, DegreeKeys } from "../types";
+import { Degree, DegreeKeys } from "../types";
 
-export const Degree: SelectOption[] = [
+export const DegreeList: Degree[] = [
   {
     name: "Computer Science",
     value: DegreeKeys.CS,
@@ -47,3 +47,5 @@ export const Degree: SelectOption[] = [
     color: "#000000",
   },
 ];
+
+export const AUTHORIZED_EMAILS = ["andres.antillon@ttu.edu", "studentlife@ttu.edu", "mbarzuna@ttu.edu"]

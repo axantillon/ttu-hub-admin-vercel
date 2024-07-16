@@ -15,7 +15,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             theme: "light",
             accentColor: "#9C4544",
             logo: "/TTULogoBig.png",
-            landingHeader: "Login with @ttu.edu email",
+            landingHeader: "Login with authorized email",
           },
           // Create embedded wallets for users who don't have a wallet
           embeddedWallets: {

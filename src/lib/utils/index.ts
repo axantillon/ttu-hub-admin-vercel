@@ -1,11 +1,12 @@
-import { Degree } from "./consts";
+import { AUTHORIZED_EMAILS, DegreeList } from "./consts";
 
-export const isTTUEmail = (email: string) => /@ttu\.edu/.test(email);
+export const isAllowedEmail = (email: string) =>
+  (AUTHORIZED_EMAILS || "").includes(email);
 
 export const extractUsername = (email: string) => email.split("@")[0];
 
 export const getDegreeByKey = (key: string) =>
-  Degree.find((degree) => degree.value === key);
+  DegreeList.find((degree) => degree.value === key);
 
 export const detectOS = () => {
   let userAgent = window.navigator.userAgent,

@@ -1,10 +1,10 @@
 "use client";
-import { isTTUEmail } from "@/lib/utils";
+import { isAllowedEmail } from "@/lib/utils";
 import { usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { FC, ReactNode, useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { EmailNotTTU } from "../views/EmailNotTTU";
+import { EmailNotAuth } from "../views/EmailNotAuth";
 import { SplashScreen } from "../views/SplashScreen";
 
 const AuthChecker: FC<{ children: ReactNode }> = ({ children }) => {
@@ -31,8 +31,13 @@ const AuthChecker: FC<{ children: ReactNode }> = ({ children }) => {
     return <SplashScreen />;
   }
 
-  if (PrivyUser && PrivyUser.email && !isAllowedEmail(PrivyUser.email.address)) {
-    return <EmailNotTTU />;
+  if (
+    PrivyUser &&
+    PrivyUser.email &&
+    !isAllowedEmail(PrivyUser.email.address)
+  ) {
+    console.log(isAllowedEmail(PrivyUser.email.address), );
+    return <EmailNotAuth />;
   }
 
   return <>{authenticated && <>{children}</>}</>;

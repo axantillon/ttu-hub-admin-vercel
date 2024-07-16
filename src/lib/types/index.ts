@@ -1,10 +1,7 @@
 export enum NavPath {
   HOME = "/",
-  LEADERBOARD = "/leaderboard",
-  EXPLORE = "/explore",
-  WALLET = "/wallet",
-  SETTINGS = "/settings",
-  ONBOARDING = "/onboarding",
+  LOGIN = "/login",
+
 }
 
 export enum DegreeKeys {
@@ -19,20 +16,11 @@ export enum DegreeKeys {
   NONE = "NONE",
 }
 
-export type SelectOption = {
+export type Degree = {
   name: string;
   value: DegreeKeys;
   color: string;
 };
-
-export interface FormComponentProps {
-  control: any;
-  name: string;
-  options?: SelectOption[];
-  label: string;
-  placeholder?: string;
-  extraProps?: any;
-}
 
 export enum OrgCategories {
   ACADEMIC = "ACADEMIC",
