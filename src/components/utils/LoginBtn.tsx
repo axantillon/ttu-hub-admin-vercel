@@ -22,20 +22,7 @@ const LoginBtn: FC<LoginBtnProps> = ({}) => {
       setLoading(true);
       setPrevAuth(true);
 
-      if (isNewUser && isTTUEmail(user.email?.address!)) {
-        try {
-          // Create user in DB
-          await createUser(extractUsername(user.email?.address!));
-          router.push(NavPath.ONBOARDING);
-        } catch (error) {
-          setLoading(false);
-          console.log(error);
-          setPrevAuth(false);
-          throw new Error("Failed to create user");
-        }
-      } else {
-        router.push(NavPath.HOME);
-      }
+      router.push(NavPath.HOME);
     },
 
     onError: (error) => {

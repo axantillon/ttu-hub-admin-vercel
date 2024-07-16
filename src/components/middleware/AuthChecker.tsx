@@ -31,7 +31,7 @@ const AuthChecker: FC<{ children: ReactNode }> = ({ children }) => {
     return <SplashScreen />;
   }
 
-  if (PrivyUser && PrivyUser.email && !isTTUEmail(PrivyUser.email.address)) {
+  if (PrivyUser && PrivyUser.email && !isAllowedEmail(PrivyUser.email.address)) {
     return <EmailNotTTU />;
   }
 
