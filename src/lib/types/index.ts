@@ -29,3 +29,12 @@ export enum OrgCategories {
   TECHNOLOGY = "TECHNOLOGY",
   SERVICE = "SERVICE",
 }
+
+export interface FormComponentProps {
+  control: any;
+  name: string;
+  label: string;
+  placeholder?: string;
+  extraProps?: any;
+  type?: string;
+}

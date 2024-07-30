@@ -48,4 +48,10 @@ export const DegreeList: Degree[] = [
   },
 ];
 
-export const AUTHORIZED_EMAILS = ["andres.antillon@ttu.edu", "studentlife@ttu.edu", "mbarzuna@ttu.edu"]
+export const AUTHORIZED_EMAILS = [
+  "andres.antillon@ttu.edu",
+  "studentlife@ttu.edu",
+  "mbarzuna@ttu.edu",
+];
+
+export const EVENT_LOCATION = ["Gathering Stairs", "Raider Room A"];

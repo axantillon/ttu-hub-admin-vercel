@@ -1,12 +1,13 @@
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { AUTHORIZED_EMAILS, DegreeList } from "./consts";
-
-export const isAllowedEmail = (email: string) =>
-  (AUTHORIZED_EMAILS || "").includes(email);
 
 export const extractUsername = (email: string) => email.split("@")[0];
 
 export const getDegreeByKey = (key: string) =>
   DegreeList.find((degree) => degree.value === key);
+
+export const isAllowedEmail = (email: string) =>
+  (AUTHORIZED_EMAILS || "").includes(email);
 
 export const detectOS = () => {
   let userAgent = window.navigator.userAgent,
@@ -29,4 +30,23 @@ export const detectOS = () => {
   }
 
   return os;
+};
+
+export const uploadEventsImage = async (file: File, eventName: string) => {
+  const supabase = createClientComponentClient();
+
+  const bucket = "events";
+
+  // Call Storage API to upload file
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(file.name, file);
+
+  // Handle error if upload failed
+  if (error) {
+    console.log(error);
+    throw new Error("Failed to upload image");
+  }
+
+  return data.fullPath;
 };
