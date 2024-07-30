@@ -4,7 +4,6 @@ import { Event, User } from "@prisma/client";
 import { format } from "date-fns";
 import Link from "next/link";
 import { FC } from "react";
-import Loader from "@/lib/utils/imageLoader";
 
 interface EventItemProps {
   event: {
