@@ -26,7 +26,6 @@ export async function createUser(username: string) {
     data: {
       firstName: "",
       lastName: "",
-      r_number: "",
       major: "",
       username,
     },
