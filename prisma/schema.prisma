@@ -31,6 +31,7 @@ model Event {
   startTime   DateTime
   location    String
   organizer   String
+  category    String?
   coverImg    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt

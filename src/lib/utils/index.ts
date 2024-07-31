@@ -32,7 +32,11 @@ export const detectOS = () => {
   return os;
 };
 
-export const uploadEventsImage = async (file: File, eventName: string) => {
+export const uploadEventsImage = async (
+  file: File,
+  eventName: string,
+  eventCategory: string
+) => {
   const supabase = createClientComponentClient();
 
   const bucket = "events";
@@ -40,10 +44,16 @@ export const uploadEventsImage = async (file: File, eventName: string) => {
   // Call Storage API to upload file
   const { data, error } = await supabase.storage
     .from(bucket)
-    .upload(file.name, file);
+    .upload(
+      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${
+        file.name
+      }`,
+      file
+    );
 
   // Handle error if upload failed
   if (error) {
+    if (error.message.includes("already exists")) return `events/${file.name}`;
     console.log(error);
     throw new Error("Failed to upload image");
   }

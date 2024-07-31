@@ -18,9 +18,6 @@ const config = {
       },
     },
     extend: {
-      colors: {
-        accent: "#9C4544",
-      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

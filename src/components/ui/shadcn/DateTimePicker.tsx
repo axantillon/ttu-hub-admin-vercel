@@ -283,7 +283,7 @@ function Calendar({
         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          "h-9 w-9 p-0 font-normal aria-selected:bg-black/80 aria-selected:text-white"
         ),
         day_range_end: "day-range-end",
         day_selected:
@@ -305,7 +305,7 @@ function Calendar({
             <div className="inline-flex gap-2">
               <Select
                 defaultValue={displayMonth.getMonth().toString()}
-                onValueChange={(value: string) => {
+                onValueChange={(value) => {
                   const newDate = new Date(displayMonth);
                   newDate.setMonth(parseInt(value, 10));
                   props.onMonthChange?.(newDate);
@@ -327,7 +327,7 @@ function Calendar({
               </Select>
               <Select
                 defaultValue={displayMonth.getFullYear().toString()}
-                onValueChange={(value: string) => {
+                onValueChange={(value) => {
                   const newDate = new Date(displayMonth);
                   newDate.setFullYear(parseInt(value, 10));
                   props.onMonthChange?.(newDate);
@@ -522,13 +522,13 @@ const TimePickerInput = React.forwardRef<
           className
         )}
         value={value || calculatedValue}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange={(e) => {
           e.preventDefault();
           onChange?.(e);
         }}
         type={type}
         inputMode="decimal"
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        onKeyDown={(e) => {
           onKeyDown?.(e);
           handleKeyDown(e);
         }}
@@ -760,7 +760,7 @@ const DateTimePicker = React.forwardRef<DateTimePickerRef, DateTimePickerProps>(
             mode="single"
             selected={value}
             month={month}
-            onSelect={(d: Date | undefined) => handleSelect(d)}
+            onSelect={(d) => handleSelect(d)}
             onMonthChange={handleSelect}
             initialFocus
             yearRange={yearRange}

@@ -1,5 +1,7 @@
 import AvatarCircles from "@/components/ui/AvatarCircles";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { Separator } from "@/components/ui/shadcn/separator";
+import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 import { Event, User } from "@prisma/client";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -16,24 +18,26 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
     <Link prefetch={true} href={`/event/${event.id}`}>
       <div className="flex flex-col gap-y-2 w-80 h-72 rounded-2xl shadow-sm shadow-gray-300 bg-white ">
         <div
-          className="relative w-full h-44 rounded-2xl shadow-md shadow-gray-400 bg-sky-500"
+          className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 bg-sky-500"
           style={{
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            backgroundImage: `url(https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg})`,
+            backgroundPosition: "center",
+            backgroundImage: `url(https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?width=320?height=176?quality=50)`,
           }}
         >
-          <div className="absolute inset-x-0 bottom-0 flex justify-end items-end h-16">
-            {event.users && event.users.length !== 0 && (
-              <AvatarCircles
-                className=" m-3 -space-x-6 *:bg-white *:text-black *:shadow-lg "
-                numPeople={event.users.length}
-                avatarUrls={event.users
-                  .slice(0, 3)
-                  .map((user) => user.profilePic || "")}
-              />
-            )}
-          </div>
+          <Badge style={{backgroundColor: EVENT_CATEGORIES.find((cat) => cat.name === event.category)?.color}}>
+            {event.category}
+          </Badge>
+          {event.users && event.users.length !== 0 && (
+            <AvatarCircles
+              className="-space-x-6 *:bg-white *:text-black *:shadow-lg "
+              numPeople={event.users.length}
+              avatarUrls={event.users
+                .slice(0, 3)
+                .map((user) => user.profilePic || "")}
+            />
+          )}
         </div>
 
         <div className="flex flex-1 flex-row items-center w-full">

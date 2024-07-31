@@ -22,9 +22,12 @@ export default async function Events() {
         </div>
 
         <div className="relative flex w-full h-full gap-4 p-4 pt-0 overflow-auto">
-          {events.map((event) => (
+          {events.length !== 0 ? events.map((event) => (
             <EventItem event={event} key={event.id} />
-          ))}
+          ))
+        :
+          <span>No events</span>
+          }
         </div>
       </div>
 
