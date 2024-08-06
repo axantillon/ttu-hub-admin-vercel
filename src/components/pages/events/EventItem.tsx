@@ -6,6 +6,7 @@ import { Event, User } from "@prisma/client";
 import { format } from "date-fns";
 import Link from "next/link";
 import { FC } from "react";
+import Image from "next/image";
 
 interface EventItemProps {
   event: {
@@ -17,16 +18,20 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
   return (
     <Link prefetch={true} href={`/event/${event.id}`}>
       <div className="flex flex-col gap-y-2 w-80 h-72 rounded-2xl shadow-sm shadow-gray-300 bg-white ">
-        <div
-          className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 bg-sky-500"
-          style={{
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            backgroundImage: `url(https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?width=320?height=176?quality=50)`,
-          }}
-        >
-          <Badge style={{backgroundColor: EVENT_CATEGORIES.find((cat) => cat.name === event.category)?.color}}>
+        <div className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 overflow-clip">
+          <Image
+            src={event.coverImg || ""}
+            fill
+            alt=""
+            className="absolute top-0 left-0 aspect-auto object-cover"
+          />
+          <Badge
+            style={{
+              backgroundColor: EVENT_CATEGORIES.find(
+                (cat) => cat.name === event.category
+              )?.color,
+            }}
+          >
             {event.category}
           </Badge>
           {event.users && event.users.length !== 0 && (

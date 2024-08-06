@@ -15,7 +15,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
     <div className={cn("flex flex-col w-48 h-dvh py-8 px-4 bg-white gap-2")}>
       <div className="relative w-full h-16 aspect-auto mb-4">
         <Image
-          src="/TTULogoBig.png"
+          src="general/TTULogoBig.png"
           className="self-center"
           fill
           style={{
