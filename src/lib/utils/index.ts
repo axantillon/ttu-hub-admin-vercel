@@ -32,23 +32,71 @@ export const detectOS = () => {
   return os;
 };
 
+const resizeImage = (file: File): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const maxWidth = 1024;
+    const maxHeight = 768;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxWidth || height > maxHeight) {
+        const aspectRatio = width / height;
+        if (aspectRatio > 4/3) {
+          width = maxWidth;
+          height = maxWidth / aspectRatio;
+        } else {
+          height = maxHeight;
+          width = maxHeight * aspectRatio;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const resizedFile = new File([blob], file.name, {
+            type: file.type,
+            lastModified: Date.now(),
+          });
+          resolve(resizedFile);
+        } else {
+          reject(new Error('Canvas to Blob conversion failed'));
+        }
+      }, file.type);
+    };
+    img.onerror = (error) => reject(error);
+    img.src = URL.createObjectURL(file);
+  });
+};
+
 export const uploadEventsImage = async (
   file: File,
   eventName: string,
   eventCategory: string
 ) => {
+
   const supabase = createClientComponentClient();
 
   const bucket = "events";
+
+  const resizedFile = await resizeImage(file);
 
   // Call Storage API to upload file
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(
-      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${
-        file.name
-      }`,
-      file
+      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${file.name}`,
+      resizedFile,
+      {
+        upsert: true
+      }
     );
 
   // Handle error if upload failed

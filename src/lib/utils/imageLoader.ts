@@ -12,6 +12,6 @@ export default function myImageLoader({
   quality?: number;
 }) {
   return `https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${src}?width=${width}&height=${height}&quality=${
-    quality || 25
+    quality || 100
   }`;
 }

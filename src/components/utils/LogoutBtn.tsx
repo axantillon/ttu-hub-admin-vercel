@@ -5,12 +5,10 @@ import { Button } from "../ui/shadcn/button";
 
 export const LogoutBtn = () => {
   const { logout } = usePrivy();
-  const [_, setPrevAuth] = useLocalStorage("prev-authenticated", false);
 
   return (
     <Button
       onClick={() => {
-        setPrevAuth(false);
         logout();
       }}
     >

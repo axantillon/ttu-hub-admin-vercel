@@ -3,10 +3,10 @@ import { Badge } from "@/components/ui/shadcn/badge";
 import { Separator } from "@/components/ui/shadcn/separator";
 import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 import { Event, User } from "@prisma/client";
-import { format } from "date-fns";
+import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
-import Image from "next/image";
+import { formatInTimeZone } from "date-fns-tz";
 
 interface EventItemProps {
   event: {
@@ -16,7 +16,7 @@ interface EventItemProps {
 
 export const EventItem: FC<EventItemProps> = ({ event }) => {
   return (
-    <Link prefetch={true} href={`/event/${event.id}`}>
+    <Link prefetch={true} href={`/events/${event.id}`}>
       <div className="flex flex-col gap-y-2 w-80 h-72 rounded-2xl shadow-sm shadow-gray-300 bg-white ">
         <div className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 overflow-clip">
           <Image
@@ -48,12 +48,20 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
         <div className="flex flex-1 flex-row items-center w-full">
           <div className="flex flex-col items-center justify-center w-1/3 h-full gap-y-2">
             <h1 className="text-2xl text-center font-normal">
-              {format(event.startTime, "MMM dd")}
+              {formatInTimeZone(
+                event.startTime,
+                "America/Costa_Rica",
+                "MMM dd"
+              )}
             </h1>
 
             <div className="flex justify-center items-center px-2 py-1 rounded-2xl bg-gray-300">
               <span className="text-xs leading-none text-center font-normal">
-                {format(event.startTime, "K:mm aa")}
+                {formatInTimeZone(
+                  event.startTime,
+                  "America/Costa_Rica",
+                  "K:mm aa"
+                )}
               </span>
             </div>
           </div>

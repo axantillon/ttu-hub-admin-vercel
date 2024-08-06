@@ -12,13 +12,11 @@ interface LoginBtnProps {}
 const LoginBtn: FC<LoginBtnProps> = ({}) => {
   const { ready, authenticated } = usePrivy();
   const [loading, setLoading] = useState(false);
-  const [_, setPrevAuth] = useLocalStorage("prev-authenticated", false);
   const router = useRouter();
 
   const { login } = useLogin({
     onComplete: () => {
       setLoading(true);
-      setPrevAuth(true);
 
       router.push(NavPath.DASHBOARD);
     },

@@ -54,3 +54,26 @@ export async function createEvent(data: {
     throw new Error("Failed to create event");
   }
 }
+
+export async function updateEvent(id: string, data: {
+  name?: string;
+  description?: string;
+  startTime?: Date;
+  location?: string;
+  organizer?: string;
+  coverImg?: string;
+}) {
+  try {
+    await prisma.event.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to update event");
+  }
+  revalidatePath(`/events/${id}`);
+  revalidatePath("/events");
+}

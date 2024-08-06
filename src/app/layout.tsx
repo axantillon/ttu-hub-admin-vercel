@@ -42,7 +42,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(inter.className, "bg-[#F5F5F5] text-black")}
     >
-      <body className="relative h-dvh w-dvw">
+      <body className="h-dvh w-dvw">
         <Analytics />
         <SpeedInsights />
         <Toaster />

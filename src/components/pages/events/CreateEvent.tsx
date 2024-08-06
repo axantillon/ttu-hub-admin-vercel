@@ -31,7 +31,6 @@ import { createEvent } from "@/db/event";
 import { uploadEventsImage } from "@/lib/utils";
 import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -65,7 +64,11 @@ const CreateEvent: FC = ({}) => {
     setLoading(true);
     let imgPath;
     try {
-      imgPath = await uploadEventsImage(data.coverImg, data.name, data.category);
+      imgPath = await uploadEventsImage(
+        data.coverImg,
+        data.name,
+        data.category
+      );
       createEvent({ ...data, coverImg: imgPath! })
         .then(() => {
           form.reset();
@@ -206,7 +209,9 @@ const CreateEvent: FC = ({}) => {
                         backgroundSize: "cover",
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
-                        backgroundImage: `url(${value ? URL.createObjectURL(value) : ""})`,
+                        backgroundImage: `url(${
+                          value ? URL.createObjectURL(value) : ""
+                        })`,
                       }}
                     />
                   )}
