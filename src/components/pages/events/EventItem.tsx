@@ -17,15 +17,16 @@ interface EventItemProps {
 export const EventItem: FC<EventItemProps> = ({ event }) => {
   return (
     <Link prefetch={true} href={`/events/${event.id}`}>
-      <div className="flex flex-col gap-y-2 w-80 h-72 rounded-2xl shadow-sm shadow-gray-300 bg-white ">
+      <div className="flex flex-col gap-y-1 w-[330px] h-[290px] rounded-2xl shadow-sm shadow-gray-300 bg-white ">
         <div className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 overflow-clip">
           <Image
             src={event.coverImg || ""}
             fill
             alt=""
-            className="absolute top-0 left-0 aspect-auto object-cover"
+            className="absolute top-0 left-0 aspect-auto object-cover bg-sky-400"
           />
           <Badge
+            className="z-10"
             style={{
               backgroundColor: EVENT_CATEGORIES.find(
                 (cat) => cat.name === event.category
@@ -40,7 +41,7 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
               numPeople={event.users.length}
               avatarUrls={event.users
                 .slice(0, 3)
-                .map((user) => user.profilePic || "")}
+                .map((user) => user.profilePic || "users/default.jpg")}
             />
           )}
         </div>
@@ -68,7 +69,7 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
 
           <Separator orientation="vertical" className="h-20" />
 
-          <div className="flex flex-col items-left justify-center w-2/3 h-24 px-3 py-1 gap-y-2">
+          <div className="flex flex-col items-left justify-center w-2/3 h-full px-3 py-1 space-y-2">
             <div className="flex flex-row test-xs font-bold text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,14 +91,14 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
                 />
               </svg>
 
-              <h2 className="pl-0.5 text-xs font-bold text-gray-500 -mb-0.5">
+              <span className="pl-0.5 text-xs font-bold text-gray-500 -mb-0.5">
                 {event.location}
-              </h2>
+              </span>
             </div>
 
-            <h1 className="text-xl font-bold leading-tight line-clamp-2">
+            <span className="text-lg font-bold leading-none line-clamp-2">
               {event.name}
-            </h1>
+            </span>
 
             <p className="text-xs font-medium text-slate-800 leading-tight line-clamp-2 pb-0.5">
               {event.description}

@@ -76,13 +76,11 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             </Link>
           </div>
 
-          <div className="absolute bottom-5 left-5">
-            {event.startTime > new Date() && <EditEventModal event={event} />}
-          </div>
+          {event.startTime > new Date() && <EditEventModal event={event} />}
         </div>
 
         <div className="flex flex-col w-1/2">
-          <div className="relative w-full h-[300px] bg-sky-400 rounded-xl overflow-clip">
+          <div className="relative w-full aspect-[330/176] bg-sky-400 rounded-xl overflow-clip">
             <Image
               src={event.coverImg || ""}
               fill
