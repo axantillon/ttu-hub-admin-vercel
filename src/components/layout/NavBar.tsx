@@ -24,20 +24,20 @@ const NavBar: FC<NavBarProps> = ({}) => {
           alt=""
         />
       </div>
-      <NavIcon pathname={NavPath.DASHBOARD} activePath={activePath}>
+      {/* <NavIcon pathname={NavPath.DASHBOARD} activePath={activePath}>
         <Box />
         <span> Dashboard </span>
-      </NavIcon>
+      </NavIcon> */}
 
       <NavIcon pathname={NavPath.EVENTS} activePath={activePath}>
         <Calendar />
         <span> Events </span>
       </NavIcon>
 
-      <NavIcon pathname={NavPath.ORGS} activePath={activePath}>
+      {/* <NavIcon pathname={NavPath.ORGS} activePath={activePath}>
         <Grid />
         <span> Student Orgs</span>
-      </NavIcon>
+      </NavIcon> */}
 
       <NavIcon pathname={NavPath.USERS} activePath={activePath}>
         <Users />

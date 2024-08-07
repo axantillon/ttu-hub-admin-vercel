@@ -28,7 +28,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
       <div className="absolute top-0 -ml-6 pt-6 w-full z-50">
         <BackButton />
       </div>
-      <div className="flex mt-4 py-4 px-6 bg-white rounded-xl gap-4">
+      <div className="relative flex mt-4 py-4 px-6 bg-white rounded-xl gap-4">
         <div className="flex flex-col w-1/2 gap-2">
           <span className="text-2xl font-bold">{event.name}</span>
 
@@ -58,20 +58,27 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
 
           <p>{event.description}</p>
 
-          <Link href={`/events/${event.id}/users`}>
-            <div className="w-fit p-2 hover:bg-black/25 rounded-xl">
-              {event.users && event.users.length !== 0 && (
-                <AvatarCircles
-                  numPeople={event.users.length}
-                  avatarUrls={event.users
-                    .slice(0, 3)
-                    .map((user) => user.profilePic || "users/default.jpg")}
-                />
-              )}
-            </div>
-          </Link>
+          <div className="flex flex-col gap-2">
+            <span className="-mb-2 text-sm text-gray-500">
+              {event.users.length} Registered
+            </span>
+            <Link href={`/events/${event.id}/users`}>
+              <div className="w-fit p-2 hover:bg-black/25 rounded-xl">
+                {event.users && event.users.length !== 0 && (
+                  <AvatarCircles
+                    numPeople={event.users.length}
+                    avatarUrls={event.users
+                      .slice(0, 3)
+                      .map((user) => user.profilePic || "users/default.jpg")}
+                  />
+                )}
+              </div>
+            </Link>
+          </div>
 
-          {event.startTime > new Date() && <EditEventModal event={event} />}
+          <div className="absolute bottom-5 left-5">
+            {event.startTime > new Date() && <EditEventModal event={event} />}
+          </div>
         </div>
 
         <div className="flex flex-col w-1/2">

@@ -96,7 +96,7 @@ const CreateEvent: FC = ({}) => {
   }
 
   return (
-    <Card className="max-w-xl">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Create New Event</CardTitle>
         <CardDescription>
@@ -105,7 +105,7 @@ const CreateEvent: FC = ({}) => {
       </CardHeader>
       <CardContent className="relative grid gap-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-2xl">
             <FormTextInput
               control={form.control}
               name="name"
@@ -124,7 +124,7 @@ const CreateEvent: FC = ({}) => {
                 control={form.control}
                 name="startTime"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel htmlFor="startTime">Start Time </FormLabel>
                     <FormControl>
                       <DateTimePicker

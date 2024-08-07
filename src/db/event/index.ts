@@ -77,3 +77,17 @@ export async function updateEvent(id: string, data: {
   revalidatePath(`/events/${id}`);
   revalidatePath("/events");
 }
+
+
+export async function getEventUsers(id: string) {
+  const event = await prisma.event.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      users: true,
+    },
+  });
+
+  return event?.users || [];
+}

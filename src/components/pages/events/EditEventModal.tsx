@@ -113,7 +113,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
       <DialogTrigger asChild>
         <Button className="w-fit">Edit Event</Button>
       </DialogTrigger>
-      <DialogContent className="bg-white sm:max-w-[600px] h-[calc(100vh-6rem)]">
+      <DialogContent className="bg-white sm:max-w-[600px] h-[calc(100vh-6rem)] pb-4">
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>
@@ -123,7 +123,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-8 h-[85%] mb-2 px-2 overflow-y-auto">
+            <div className="space-y-8 h-[80%] mb-4 pb-6 px-2 pr-4 overflow-y-auto">
               <FormTextInput
                 control={form.control}
                 name="name"

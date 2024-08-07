@@ -1,8 +1,11 @@
+"use client";
+
+import { NavPath } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="flex flex-col pt-12 px-8 space-y-8">
+  const router = useRouter();
 
-    </div>
-  );
+  router.push(NavPath.EVENTS);
+  return <div className="flex flex-col pt-12 px-8 space-y-8"></div>;
 }
