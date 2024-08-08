@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/shadcn/button";
 import { cn } from "@/lib/utils/cn";
-import { Bold, Italic, Underline } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Bold, Italic, Underline } from "react-feather";
 
 interface MarkdownInputProps {
   setContent: (content: string) => void;
@@ -36,8 +36,8 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
         reader.onload = (event) => {
           const img = new Image();
           img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
             const maxWidth = 1024;
             const maxHeight = 768;
             let width = img.width;
@@ -59,9 +59,10 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
             canvas.height = height;
             ctx?.drawImage(img, 0, 0, width, height);
 
-            const resizedImg = document.createElement('img');
-            resizedImg.src = canvas.toDataURL('image/jpeg', 0.7); // Adjust quality as needed
-            resizedImg.className = "inline-block w-[375px] max-h-[350px] object-contain mx-auto";
+            const resizedImg = document.createElement("img");
+            resizedImg.src = canvas.toDataURL("image/jpeg", 0.7); // Adjust quality as needed
+            resizedImg.className =
+              "inline-block w-[375px] max-h-[350px] object-contain mx-auto";
 
             insertNodeAtCursor(resizedImg);
             updateContent();
@@ -121,16 +122,19 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
     }
   };
 
-  const toggleStyle = useCallback((style: string) => {
-    document.execCommand(style, false);
-    updateStyleStates();
-    updateContent();
-  }, [updateContent]);
+  const toggleStyle = useCallback(
+    (style: string) => {
+      document.execCommand(style, false);
+      updateStyleStates();
+      updateContent();
+    },
+    [updateContent]
+  );
 
   const updateStyleStates = () => {
-    setIsBold(document.queryCommandState('bold'));
-    setIsItalic(document.queryCommandState('italic'));
-    setIsUnderline(document.queryCommandState('underline'));
+    setIsBold(document.queryCommandState("bold"));
+    setIsItalic(document.queryCommandState("italic"));
+    setIsUnderline(document.queryCommandState("underline"));
   };
 
   useEffect(() => {
@@ -200,7 +204,7 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              const br = document.createElement('br');
+              const br = document.createElement("br");
               insertNodeAtCursor(br);
               updateContent();
             }

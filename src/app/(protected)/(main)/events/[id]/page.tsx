@@ -1,6 +1,7 @@
 import { EditEventModal } from "@/components/pages/events/EditEventModal";
 import { EventMessage } from "@/components/pages/events/EventMessage";
 import SendEventMessage from "@/components/pages/events/sendEventMessage";
+import ShareLink from "@/components/pages/events/ShareLink";
 import AvatarCircles from "@/components/ui/AvatarCircles";
 import { Badge } from "@/components/ui/shadcn/badge";
 import { BackButton } from "@/components/utils/BackButton";
@@ -78,7 +79,10 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             </Link>
           </div>
 
-          {event.startTime > new Date() && <EditEventModal event={event} />}
+          <div className="flex flex-row w-full justify-between">
+            <EditEventModal event={event} />
+            <ShareLink text={`https://ttu-hub.vercel.app/event/${event.id}`} />
+          </div>
         </div>
 
         <div className="flex flex-col w-1/2">

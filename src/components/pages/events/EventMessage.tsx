@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/shadcn/alert-dialog";
 import { useToast } from "@/components/ui/shadcn/use-toast";
 import { removeEventMessage } from "@/db/event";
-import { Loader, Trash2Icon } from "lucide-react";
 import { useState } from "react";
+import { Loader, Trash2 } from "react-feather";
 
 export function EventMessage({
   eventId,
@@ -39,7 +39,8 @@ export function EventMessage({
         toast({
           variant: "destructive",
           title: "Failed to delete message",
-          description: "An error occurred while deleting the message. Try again.",
+          description:
+            "An error occurred while deleting the message. Try again.",
         });
       });
   };
@@ -54,7 +55,7 @@ export function EventMessage({
             {isDeleting ? (
               <Loader size={16} className="animate-spin" />
             ) : (
-              <Trash2Icon size={16} />
+              <Trash2 size={16} />
             )}
           </div>
         </AlertDialogTrigger>
