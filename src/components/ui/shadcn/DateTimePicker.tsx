@@ -2,15 +2,10 @@
 import { cn } from "@/lib/utils/cn";
 import { add, format } from "date-fns";
 import { enUS, Locale } from "date-fns/locale";
-import {
-  Calendar as CalendarIcon,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-} from "lucide-react";
 import * as React from "react";
 import { useImperativeHandle, useRef } from "react";
 import { DayPicker } from "react-day-picker";
+import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon } from "react-feather";
 import { Button, buttonVariants } from "./button";
 import { CalendarProps } from "./calendar";
 import { Input } from "./input";
