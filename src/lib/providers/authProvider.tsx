@@ -14,7 +14,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
           appearance: {
             theme: "light",
             accentColor: "#9C4544",
-            logo: "/TTULogoBig.png",
+            logo: "/TTULogo-local.webp",
             landingHeader: "Login with authorized email",
           },
           // Create embedded wallets for users who don't have a wallet
