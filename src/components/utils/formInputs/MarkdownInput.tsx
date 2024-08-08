@@ -83,8 +83,11 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
             link.title = text;
             link.target = "_blank";
             link.rel = "noopener noreferrer";
-            link.className = "underline text-blue-600";
-            insertNodeAtCursor(link);
+
+            const underline = document.createElement("u");
+            underline.appendChild(link);
+
+            insertNodeAtCursor(underline);
           } else {
             insertNodeAtCursor(document.createTextNode(text));
           }
