@@ -79,7 +79,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             </Link>
           </div>
 
-          <div className="flex flex-row w-full justify-between">
+          <div className="flex flex-row w-full justify-between mt-auto">
             <EditEventModal event={event} />
             <ShareLink text={`https://ttu-hub.vercel.app/event/${event.id}`} />
           </div>
