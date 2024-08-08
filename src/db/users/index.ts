@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/db/prisma";
 import { User } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export async function getAllUsers() {
   console.log("fetching all users");
@@ -57,5 +58,6 @@ export async function deleteUserByUsername(username: string) {
     },
   });
 
+  revalidatePath("/users");
   return user;
 }

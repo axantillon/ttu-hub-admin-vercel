@@ -32,6 +32,7 @@ model Event {
   organizer   String
   category    String?
   coverImg    String?
+  messages    String[] 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   users       User[]    @relation("UserToEvent")

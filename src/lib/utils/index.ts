@@ -38,13 +38,13 @@ const resizeImage = (file: File): Promise<File> => {
     const maxWidth = 1024;
     const maxHeight = 768;
     img.onload = () => {
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       let width = img.width;
       let height = img.height;
 
       if (width > maxWidth || height > maxHeight) {
         const aspectRatio = width / height;
-        if (aspectRatio > 4/3) {
+        if (aspectRatio > 4 / 3) {
           width = maxWidth;
           height = maxWidth / aspectRatio;
         } else {
@@ -56,7 +56,7 @@ const resizeImage = (file: File): Promise<File> => {
       canvas.width = width;
       canvas.height = height;
 
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       ctx?.drawImage(img, 0, 0, width, height);
 
       canvas.toBlob((blob) => {
@@ -67,7 +67,7 @@ const resizeImage = (file: File): Promise<File> => {
           });
           resolve(resizedFile);
         } else {
-          reject(new Error('Canvas to Blob conversion failed'));
+          reject(new Error("Canvas to Blob conversion failed"));
         }
       }, file.type);
     };
@@ -81,7 +81,6 @@ export const uploadEventsImage = async (
   eventName: string,
   eventCategory: string
 ) => {
-
   const supabase = createClientComponentClient();
 
   const bucket = "events";
@@ -92,10 +91,12 @@ export const uploadEventsImage = async (
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(
-      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${file.name}`,
+      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${
+        file.name
+      }`,
       resizedFile,
       {
-        upsert: true
+        upsert: true,
       }
     );
 
@@ -107,4 +108,25 @@ export const uploadEventsImage = async (
   }
 
   return data.fullPath;
+};
+
+export const base64ToFile = (base64String: string, filename: string) => {
+  // Remove the data URL prefix
+  const base64Data = base64String.replace(/^data:image\/\w+;base64,/, "");
+
+  // Decode the base64 string
+  const binaryData = atob(base64Data);
+
+  // Create an array buffer from the binary data
+  const arrayBuffer = new ArrayBuffer(binaryData.length);
+  const uint8Array = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < binaryData.length; i++) {
+    uint8Array[i] = binaryData.charCodeAt(i);
+  }
+
+  // Create a Blob from the array buffer
+  const blob = new Blob([arrayBuffer], { type: 'image/webp' });
+
+  // Create a File object from the Blob
+  return new File([blob], filename, { type: 'image/webp' });
 };

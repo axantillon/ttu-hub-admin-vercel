@@ -23,7 +23,6 @@ export async function getAllEvents(pastEvents: boolean = false) {
 }
 
 export async function getEventById(id: string) {
-  console.log("fetching user by username");
   const event = await prisma.event.findUnique({
     where: {
       id,
@@ -55,14 +54,17 @@ export async function createEvent(data: {
   }
 }
 
-export async function updateEvent(id: string, data: {
-  name?: string;
-  description?: string;
-  startTime?: Date;
-  location?: string;
-  organizer?: string;
-  coverImg?: string;
-}) {
+export async function updateEvent(
+  id: string,
+  data: {
+    name?: string;
+    description?: string;
+    startTime?: Date;
+    location?: string;
+    organizer?: string;
+    coverImg?: string;
+  }
+) {
   try {
     await prisma.event.update({
       where: {
@@ -78,7 +80,6 @@ export async function updateEvent(id: string, data: {
   revalidatePath("/events");
 }
 
-
 export async function getEventUsers(id: string) {
   const event = await prisma.event.findUnique({
     where: {
@@ -90,4 +91,59 @@ export async function getEventUsers(id: string) {
   });
 
   return event?.users || [];
+}
+
+export async function addEventMessage(id: string, message: string) {
+  try {
+    await prisma.event.update({
+      where: {
+        id,
+      },
+      data: {
+        messages: {
+          push: message,
+        },
+      },
+    });
+
+    revalidatePath(`/events/${id}`);
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to add event message");
+  }
+}
+
+export async function removeEventMessage(id: string, messageIndex: number) {
+  try {
+    // First, fetch the current event
+    const event = await prisma.event.findUnique({
+      where: { id },
+      select: { messages: true },
+    });
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Remove the message at the specified index
+    const updatedMessages = event.messages
+      .slice()
+      .reverse() // We need to reverse so that the index matches the index given when rendered in reverse in the UI
+      .filter((_, index) => index !== messageIndex);
+
+    // Update the event with the new list of messages
+    await prisma.event.update({
+      where: { id },
+      data: {
+        messages: {
+          set: updatedMessages.slice().reverse(), // we need to reverse again to preserve original order
+        },
+      },
+    });
+
+    revalidatePath(`/events/${id}`);
+  } catch (e) {
+    console.error(e);
+    throw new Error("Failed to remove event message");
+  }
 }

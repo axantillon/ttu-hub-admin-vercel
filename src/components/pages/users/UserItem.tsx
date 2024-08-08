@@ -36,7 +36,6 @@ const UserItem: FC<UserItemProps> = ({ user }) => {
     deleteUserByUsername(user.username)
       .then(() => {
         setIsDeleting(false);
-        window.location.reload();
       })
       .catch(() => {
         setIsDeleting(false);
