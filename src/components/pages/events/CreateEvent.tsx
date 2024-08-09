@@ -103,9 +103,12 @@ const CreateEvent: FC = ({}) => {
           Fill out the details for your new event.
         </CardDescription>
       </CardHeader>
-      <CardContent className="relative grid gap-6">
+      <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-2xl">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 max-w-2xl"
+          >
             <FormTextInput
               control={form.control}
               name="name"
@@ -124,8 +127,8 @@ const CreateEvent: FC = ({}) => {
                 control={form.control}
                 name="startTime"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel htmlFor="startTime">Start Time </FormLabel>
+                  <FormItem className="flex flex-col justify-end">
+                    <FormLabel className="mb-1">Start Time </FormLabel>
                     <FormControl>
                       <DateTimePicker
                         value={field.value}
@@ -218,7 +221,6 @@ const CreateEvent: FC = ({}) => {
                 </FormItem>
               )}
             />
-
             <Button disabled={loading} type="submit">
               {loading ? "Creating Event..." : "Create Event"}
             </Button>
