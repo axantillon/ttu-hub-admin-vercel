@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, ReactNode } from "react";
-import { Box, Calendar, Grid, Users } from "react-feather";
+import { Calendar, Users } from "react-feather";
 
 interface NavBarProps {}
 const NavBar: FC<NavBarProps> = ({}) => {
@@ -13,7 +13,10 @@ const NavBar: FC<NavBarProps> = ({}) => {
 
   return (
     <div className={cn("flex flex-col w-48 h-dvh py-8 px-4 bg-white gap-2")}>
-      <div className="relative w-full h-16 aspect-auto mb-4">
+      <Link
+        href={NavPath.DASHBOARD}
+        className="relative w-full h-16 aspect-auto mb-4"
+      >
         <Image
           src="general/TTULogoBig.png"
           className="self-center"
@@ -21,9 +24,9 @@ const NavBar: FC<NavBarProps> = ({}) => {
           style={{
             objectFit: "contain",
           }}
-          alt=""
+          alt="TTU Logo"
         />
-      </div>
+      </Link>
       {/* <NavIcon pathname={NavPath.DASHBOARD} activePath={activePath}>
         <Box />
         <span> Dashboard </span>
