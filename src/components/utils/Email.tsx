@@ -13,7 +13,7 @@ export async function sendEmail(
 ) {
   const e = await resend.emails.send({
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
-    to: "andres.antillon@ttu.edu", //emails,
+    to: emails,
     subject: subject,
     // bcc: "mbarzuna@ttu.edu",
     react: <Email subject={subject} message={message} event={event} />,
