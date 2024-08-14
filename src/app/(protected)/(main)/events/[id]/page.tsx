@@ -1,3 +1,4 @@
+import DeleteEvent from "@/components/pages/events/DeleteEvent";
 import { EditEventModal } from "@/components/pages/events/EditEventModal";
 import { EventMessage } from "@/components/pages/events/EventMessage";
 import SendEventMessage from "@/components/pages/events/sendEventMessage";
@@ -80,7 +81,10 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
           </div>
 
           <div className="flex flex-row w-full justify-between mt-auto">
-            <EditEventModal event={event} />
+            <div className="flex items-center gap-2">
+              <EditEventModal event={event} />
+              <DeleteEvent eventId={event.id} />
+            </div>
             <ShareLink text={`https://ttu-hub.vercel.app/event/${event.id}`} />
           </div>
         </div>

@@ -30,7 +30,6 @@ const AuthChecker: FC<{ children: ReactNode }> = ({ children }) => {
     PrivyUser.email &&
     !isAllowedEmail(PrivyUser.email.address)
   ) {
-    console.log(isAllowedEmail(PrivyUser.email.address));
     return <EmailNotAuth />;
   }
 

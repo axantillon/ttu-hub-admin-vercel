@@ -19,8 +19,12 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
   const updateContent = useCallback(() => {
     if (editorRef.current) {
       const newContent = editorRef.current.innerHTML;
-      setContent(newContent);
-      setIsEmpty(newContent === "" || newContent === "<br>");
+      // Remove any empty paragraphs or divs and trailing newlines
+      const cleanedContent = newContent
+        .replace(/<(p|div)>\s*<\/(p|div)>/g, '')
+        .replace(/(<br\s*\/?>|\n|\r)+$/g, '');
+      setContent(cleanedContent);
+      setIsEmpty(cleanedContent.trim() === "");
     }
   }, [setContent]);
 
@@ -161,6 +165,14 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [toggleStyle]);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      document.execCommand('insertLineBreak');
+      updateContent();
+    }
+  };
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row gap-2 mb-2">
@@ -201,14 +213,7 @@ const MarkdownInput: React.FC<MarkdownInputProps> = ({ setContent }) => {
           contentEditable
           onPaste={handlePaste}
           onInput={handleInput}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              const br = document.createElement("br");
-              insertNodeAtCursor(br);
-              updateContent();
-            }
-          }}
+          onKeyDown={handleKeyDown}
           className="min-h-[200px] p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
         />
       </div>

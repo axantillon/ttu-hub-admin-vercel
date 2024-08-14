@@ -1,5 +1,6 @@
 "use server";
 
+import { sendEmail } from "@/components/utils/Email";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 
@@ -93,7 +94,11 @@ export async function getEventUsers(id: string) {
   return event?.users || [];
 }
 
-export async function addEventMessage(id: string, message: string) {
+export async function addEventMessage(
+  id: string,
+  message: string,
+  sendAsEmail: boolean
+) {
   try {
     await prisma.event.update({
       where: {
@@ -106,10 +111,37 @@ export async function addEventMessage(id: string, message: string) {
       },
     });
 
+    if (sendAsEmail) {
+      const event = await getEventById(id);
+
+      if (!event) {
+        throw new Error("Event not found");
+      }
+      const emails =
+        event.users.map((user) => `${user.username}@ttu.edu`) || [];
+
+      if (emails.length > 0) {
+        await sendEmail(emails, `New message in ${event?.name}`, message, event).catch(
+          // Remove the message if email sending fails
+          async (e) => {
+            console.error("Failed to send email:", e);
+            await prisma.event.update({
+              where: { id },
+              data: {
+                messages: {
+                  set: event?.messages.slice(0, -1), // Remove the last message
+                },
+              },
+            });
+            throw new Error("Failed to send email");
+          }
+        );
+      }
+    }
     revalidatePath(`/events/${id}`);
   } catch (e) {
     console.error(e);
-    throw new Error("Failed to add event message");
+    throw e;
   }
 }
 
@@ -146,4 +178,11 @@ export async function removeEventMessage(id: string, messageIndex: number) {
     console.error(e);
     throw new Error("Failed to remove event message");
   }
+}
+
+export async function deleteEvent(id: string) {
+  await prisma.event.delete({
+    where: { id },
+  });
+  revalidatePath("/events");
 }
