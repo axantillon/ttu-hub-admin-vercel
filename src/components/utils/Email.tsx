@@ -15,7 +15,7 @@ export async function sendEmail(
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
     to: emails,
     subject: subject,
-    // bcc: "mbarzuna@ttu.edu",
+    bcc: "mbarzuna@ttu.edu",
     react: <Email subject={subject} message={message} event={event} />,
   });
 
@@ -29,14 +29,7 @@ export async function sendEmail(
 
 import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 import { Event } from "@prisma/client";
-import {
-    Body,
-    Container,
-    Head,
-    Html,
-    Preview,
-    Text,
-} from "@react-email/components";
+import { Head, Html, Preview, Text } from "@react-email/components";
 import { formatInTimeZone } from "date-fns-tz";
 
 export const Email = ({
@@ -56,15 +49,16 @@ export const Email = ({
     <Html>
       <Head />
       <Preview>{subject}</Preview>
-      <Body style={main}>
-        <Container style={container}>
+      <div style={main}>
+        <div style={container}>
           <img
             style={{
-              width: "100%",
-              height: "250px",
+              maxHeight: "176px",
+              aspectRatio: "330/176",
               borderRadius: "12px",
               objectFit: "cover" as const,
               margin: "0 auto",
+              width: "100%",
             }}
             src={`https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?quality=75)`}
             alt="Event Cover"
@@ -117,7 +111,13 @@ export const Email = ({
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", marginLeft: "24px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: "24px",
+              }}
+            >
               <span
                 style={{
                   fontSize: "2rem",
@@ -141,7 +141,7 @@ export const Email = ({
                 {event.location}
               </span>
 
-              <span style={{ fontSize: "12px", lineHeight: "14px"}}>
+              <span style={{ fontSize: "12px", lineHeight: "14px" }}>
                 {event.description}
               </span>
             </div>
@@ -158,29 +158,16 @@ export const Email = ({
               ),
             }}
           />
-        </Container>
+        </div>
         <Text style={footer}>
           This email was sent by TTU@CR Hub. If you have any questions, please
           contact us.
         </Text>
-      </Body>
+      </div>
     </Html>
   );
 };
 
-const badgeStyle = {
-  width: "fit-content",
-  display: "flex",
-  alignItems: "center",
-  padding: "2px 10px",
-  fontSize: "12px",
-  fontWeight: "600",
-  lineHeight: "16px",
-  borderRadius: "9999px",
-  color: "#ffffff",
-  zIndex: "10",
-  marginTop: "8px",
-};
 
 const main = {
   fontFamily:
@@ -190,7 +177,7 @@ const main = {
 const container = {
   backgroundColor: "#F5F5F5",
   margin: "0 auto",
-  padding: "0 48px",
+  maxWidth: "450px",
   marginBottom: "64px",
   paddingBottom: "32px",
 };
@@ -199,8 +186,8 @@ const messageBox = {
   background: "#ffffff",
   borderRadius: "12px",
   padding: "16px 24px",
-  width: "390px",
-  margin: "0 50px",
+  maxWidth: "390px",
+  margin: "0 32px",
   marginTop: "16px",
   boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
 };
@@ -216,6 +203,21 @@ const footer = {
 const titleStyle = {
   fontSize: "16px",
   margin: "32px 24px 16px",
+};
+
+const badgeStyle = {
+  width: "fit-content",
+  display: "flex",
+  alignItems: "center",
+  padding: "2px 10px",
+  fontSize: "12px",
+  fontWeight: "600",
+  lineHeight: "16px",
+  borderRadius: "9999px",
+  color: "#ffffff",
+  zIndex: "10",
+  marginTop: "8px",
+  textAlign: "center" as const,
 };
 
 const dateBoxStyle = {
