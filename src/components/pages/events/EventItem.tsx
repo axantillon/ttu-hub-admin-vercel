@@ -3,10 +3,10 @@ import { Badge } from "@/components/ui/shadcn/badge";
 import { Separator } from "@/components/ui/shadcn/separator";
 import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 import { Event, User } from "@prisma/client";
+import { formatInTimeZone } from "date-fns-tz";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
-import { formatInTimeZone } from "date-fns-tz";
 
 interface EventItemProps {
   event: {
@@ -48,13 +48,16 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
 
         <div className="flex flex-1 flex-row items-center w-full">
           <div className="flex flex-col items-center justify-center w-1/3 h-full gap-y-2">
-            <h1 className="text-2xl text-center font-normal">
+            <span className="text-xs text-center font-normal -mb-2">
+              {formatInTimeZone(event.startTime, "America/Costa_Rica", "EEEE")}
+            </span>
+            <span className="text-2xl text-center font-normal">
               {formatInTimeZone(
                 event.startTime,
                 "America/Costa_Rica",
                 "MMM dd"
               )}
-            </h1>
+            </span>
 
             <div className="flex justify-center items-center px-2 py-1 rounded-2xl bg-gray-300">
               <span className="text-xs leading-none text-center font-normal">
