@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils/cn";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 
 const APP_NAME = "Admin - TTU@CR Hub";
 const APP_DEFAULT_TITLE = "Admin Dashboard for TTU@CR Hub";
@@ -26,7 +26,7 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
-const inter = Inter({
+const montserrat = Montserrat({
   subsets: ["latin"],
   display: "swap",
 });
@@ -40,7 +40,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn(inter.className, "bg-[#F5F5F5] text-black")}
+      className={cn(montserrat.className, "bg-[#F5F5F5] text-black")}
     >
       <body className="h-dvh w-dvw">
         <Analytics />
