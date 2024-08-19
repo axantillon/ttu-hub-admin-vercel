@@ -1,6 +1,6 @@
 "use server";
 
-import { sendEmail } from "@/components/utils/Email";
+import { sendNewEventEmail, sendUpdateEmail } from "@/components/utils/Email";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 
@@ -42,8 +42,10 @@ export async function createEvent(data: {
   startTime: Date;
   location: string;
   organizer: string;
-  coverImg: string;
-}) {
+    coverImg: string;
+  },
+  sender: string
+) {
   try {
     await prisma.event.create({
       data,
@@ -97,7 +99,8 @@ export async function getEventUsers(id: string) {
 export async function addEventMessage(
   id: string,
   message: string,
-  sendAsEmail: boolean
+  sendAsEmail: boolean,
+  sender: string
 ) {
   try {
     await prisma.event.update({
@@ -121,7 +124,12 @@ export async function addEventMessage(
         event.users.map((user) => `${user.username}@ttu.edu`) || [];
 
       if (emails.length > 0) {
-        await sendEmail(emails, `New message in ${event?.name}`, message, event).catch(
+        await sendUpdateEmail(
+          sender,
+          emails,
+          message,
+          event
+        ).catch(
           // Remove the message if email sending fails
           async (e) => {
             console.error("Failed to send email:", e);

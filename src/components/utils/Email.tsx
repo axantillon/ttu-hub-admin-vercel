@@ -1,22 +1,30 @@
 /* eslint-disable @next/next/no-img-element */
 "use server";
 
+import { getAllUsers } from "@/db/users";
+import { EVENT_CATEGORIES } from "@/lib/utils/consts";
+import { Event } from "@prisma/client";
+import { Head, Html, Preview, Text } from "@react-email/components";
+import { formatInTimeZone } from "date-fns-tz";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendEmail(
-  emails: string | string[],
-  subject: string,
-  message: string,
-  event: Event
-) {
+// Email Functions
+export async function sendNewEventEmail(event: Event, sender: string) {
+  const emails = (await getAllUsers()).map((u) => `${u.username}@ttu.edu`);
+
   const e = await resend.emails.send({
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
     to: emails,
-    subject: subject,
-    bcc: "mbarzuna@ttu.edu",
-    react: <Email subject={subject} message={message} event={event} />,
+    subject: `${event.name} - Check it out!`,
+    bcc: sender,
+    react: (
+      <Email
+        subject={`${event.name} - Check it out!`}
+        event={event}
+      />
+    ),
   });
 
   if (e.error) {
@@ -27,18 +35,41 @@ export async function sendEmail(
   return e.data;
 }
 
-import { EVENT_CATEGORIES } from "@/lib/utils/consts";
-import { Event } from "@prisma/client";
-import { Head, Html, Preview, Text } from "@react-email/components";
-import { formatInTimeZone } from "date-fns-tz";
+export async function sendUpdateEmail(
+  sender: string,
+  emails: string | string[],
+  message: string,
+  event: Event
+) {
+  const e = await resend.emails.send({
+    from: "TTU@CR Hub <updates@ttucr-hub.app>",
+    to: emails,
+    subject: `${event.name} - New message`,
+    bcc: sender,
+    react: (
+      <Email
+        subject={`New message in ${event.name}`}
+        message={message}
+        event={event}
+      />
+    ),
+  });
 
-export const Email = ({
+  if (e.error) {
+    console.log(e);
+    throw new Error("Failed to send email");
+  }
+
+  return e.data;
+}
+
+const Email = ({
   subject,
   message,
   event,
 }: {
   subject: string;
-  message: string;
+  message?: string;
   event: Event;
 }) => {
   const badgeColor =
@@ -52,31 +83,12 @@ export const Email = ({
       <div style={main}>
         <div style={container}>
           <img
-            style={{
-              maxHeight: "176px",
-              aspectRatio: "330/176",
-              borderRadius: "12px",
-              objectFit: "cover" as const,
-              margin: "0 auto",
-              width: "100%",
-            }}
+            style={coverImageStyle}
             src={`https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?quality=75)`}
             alt="Event Cover"
           />
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              margin: "8px 16px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
+          <div style={eventInfoContainer}>
+            <div style={dateAndCategoryContainer}>
               <div style={dateBoxStyle}>
                 <span style={dayStyle}>
                   {formatInTimeZone(
@@ -101,63 +113,48 @@ export const Email = ({
                 </span>
               </div>
 
-              <div
-                style={{
-                  ...badgeStyle,
-                  backgroundColor: badgeColor,
-                }}
-              >
-                {event.category}
+              <div style={timeBoxStyle}>
+                <span style={timeTextStyle}>
+                  {formatInTimeZone(
+                    event.startTime,
+                    "America/Costa_Rica",
+                    "K:mm aa"
+                  )}
+                </span>
               </div>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "24px",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "2rem",
-                  lineHeight: "2.25rem",
-                  fontWeight: "700",
-                }}
-              >
-                {event.name}
-              </span>
-
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "12px",
-                  lineHeight: "14px",
-                  marginTop: "4px",
-                  marginBottom: "6px",
-                }}
-              >
-                {event.location}
-              </span>
-
-              <span style={{ fontSize: "12px", lineHeight: "14px" }}>
-                {event.description}
-              </span>
+            <div style={eventDetailsContainer}>
+              <span style={eventNameStyle}>{event.name}</span>
+              <span style={eventLocationStyle}>{event.location}</span>
+              <span style={eventDescriptionStyle}>{event.description}</span>
+              <div style={{ ...badgeStyle, backgroundColor: badgeColor }}>
+                {event.category}
+              </div>
             </div>
           </div>
-          <span style={titleStyle}>
-            There&apos;s a new update for this event...
-          </span>
-          <div
-            style={messageBox}
-            dangerouslySetInnerHTML={{
-              __html: message.replace(
-                /<img/g,
-                '<img style="display: block; margin: 0 auto; width: 375px;"'
-              ),
-            }}
-          />
+          {message ? (
+            <>
+              <span style={titleStyle}>
+                There&apos;s a new message for this event...
+              </span>
+              <div
+                style={messageBox}
+                dangerouslySetInnerHTML={{
+                  __html: message.replace(
+                    /<img/g,
+                    '<img style="display: block; margin: 0 auto; max-width: 300px; height: auto; object-fit: contain;"'
+                  ),
+                }}
+              />
+            </>
+          ) : (
+            <span style={titleStyle}>There&apos;s a new event going on!</span>
+          )}
+          <br />
+          <a href={`https://ttucr-hub.app/event/${event.id}`} style={linkStyle}>
+            Check it out in the app!
+          </a>
         </div>
         <Text style={footer}>
           This email was sent by TTU@CR Hub. If you have any questions, please
@@ -167,7 +164,6 @@ export const Email = ({
     </Html>
   );
 };
-
 
 const main = {
   fontFamily:
@@ -205,19 +201,21 @@ const titleStyle = {
   margin: "32px 24px 16px",
 };
 
-const badgeStyle = {
-  width: "fit-content",
+const timeBoxStyle = {
   display: "flex",
+  justifyContent: "center",
   alignItems: "center",
-  padding: "2px 10px",
+  padding: "4px 8px",
+  borderRadius: "16px",
+  backgroundColor: "#D1D5DB",
+  marginTop: "6px",
+};
+
+const timeTextStyle = {
   fontSize: "12px",
-  fontWeight: "600",
-  lineHeight: "16px",
-  borderRadius: "9999px",
-  color: "#ffffff",
-  zIndex: "10",
-  marginTop: "8px",
+  lineHeight: "1",
   textAlign: "center" as const,
+  fontWeight: "400",
 };
 
 const dateBoxStyle = {
@@ -247,4 +245,71 @@ const monthStyle = {
 const dateStyle = {
   fontSize: "24px",
   lineHeight: "26px",
+};
+
+const coverImageStyle = {
+  maxHeight: "176px",
+  aspectRatio: "330/176",
+  borderRadius: "0 0 12px 12px",
+  objectFit: "cover" as const,
+  margin: "0 auto",
+  width: "100%",
+};
+
+const eventInfoContainer = {
+  display: "flex",
+  alignItems: "center",
+  margin: "8px 16px",
+};
+
+const dateAndCategoryContainer = {
+  display: "flex",
+  flexDirection: "column" as const,
+  alignItems: "center",
+};
+
+const eventDetailsContainer = {
+  display: "flex",
+  flexDirection: "column" as const,
+  marginLeft: "24px",
+};
+
+const eventNameStyle = {
+  fontSize: "2rem",
+  lineHeight: "2.25rem",
+  fontWeight: "700",
+};
+
+const eventLocationStyle = {
+  ...dayStyle,
+  display: "flex",
+  alignItems: "center",
+  marginTop: "4px",
+  marginBottom: "6px",
+};
+
+const eventDescriptionStyle = dayStyle;
+
+const badgeStyle = {
+  width: "fit-content",
+  padding: "2px 8px",
+  fontSize: "10px",
+  lineHeight: "12px",
+  fontWeight: "600",
+  borderRadius: "9999px",
+  color: "#ffffff",
+  zIndex: "10",
+  marginTop: "6px",
+  textAlign: "center" as const,
+};
+
+const linkStyle = {
+  textDecoration: 'underline',
+  color: '#3B82F6',
+  paddingTop: '24px',
+  textAlign: 'center' as const,
+  display: 'block',
+  margin: '0 auto',
+  width: 'fit-content',
+  fontSize: '10px',
 };

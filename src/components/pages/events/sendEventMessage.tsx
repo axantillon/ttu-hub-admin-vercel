@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/shadcn/checkbox";
 import { toast } from "@/components/ui/shadcn/use-toast";
 import MarkdownInput from "@/components/utils/formInputs/MarkdownInput";
 import { addEventMessage } from "@/db/event";
+import { usePrivy } from "@privy-io/react-auth";
 import { useCallback, useState } from "react";
 
 const SendEventMessage = ({ eventId }: { eventId: string }) => {
@@ -12,11 +13,12 @@ const SendEventMessage = ({ eventId }: { eventId: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [markdownKey, setMarkdownKey] = useState(0);
   const [sendAsEmail, setSendAsEmail] = useState(true);
+  const { user } = usePrivy()
 
   const handleSubmit = useCallback(() => {
     setIsLoading(true);
 
-    addEventMessage(eventId, content, sendAsEmail)
+    addEventMessage(eventId, content, sendAsEmail, user?.email?.address!)
       .then((_) => {
         setContent("");
         toast({
@@ -35,7 +37,7 @@ const SendEventMessage = ({ eventId }: { eventId: string }) => {
         });
         setIsLoading(false);
       });
-  }, [eventId, content, sendAsEmail]);
+  }, [eventId, content, sendAsEmail, user?.email?.address]);
 
   return (
     <div className="flex flex-col">
