@@ -57,50 +57,52 @@ const UserItem: FC<UserItemProps> = ({ user }) => {
   return (
     <div
       className={cn(
-        `flex items-center justify-between w-full h-14 px-2 border-2 rounded-xl`
+        `flex flex-col sm:flex-row items-start sm:items-center justify-between w-full p-3 sm:p-2 border-2 rounded-xl`
       )}
       style={{ borderColor: major.color }}
     >
-      <div className="flex items-center gap-2">
-        <Avatar className="w-10 h-10">
+      <div className="flex items-center gap-2 mb-2 sm:mb-0">
+        <Avatar className="w-10 h-10 flex-shrink-0">
           <AvatarImage src={user.profilePic!} alt={user.username} />
           <AvatarFallback className="bg-black/10">
             {(user.firstName[0], user.lastName[0])}
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex gap-1">
-          <span className="">{`${user.firstName} ${user.lastName}`}</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span className="font-semibold">{`${user.firstName} ${user.lastName}`}</span>
 
-          <div className="w-min px-2 pb-0.5 rounded-full bg-black/10">
-            <span className="text-xs leading-none">@{user.username}</span>
-          </div>
+          <div className="flex flex-wrap gap-1 w-[200px] md:w-auto">
+            <div className="w-min px-2 pb-0.5 rounded-full bg-black/10">
+              <span className="text-xs leading-none">@{user.username}</span>
+            </div>
 
-          <div
-            className="w-min px-2 pb-0.5 rounded-full bg-black/10"
-            style={{ backgroundColor: major.color }}
-          >
-            <span className="text-xs leading-none text-white">
-              {major.value}
-            </span>
-          </div>
-
-          {minor && minor.value !== "NONE" && (
             <div
               className="w-min px-2 pb-0.5 rounded-full bg-black/10"
-              style={{ backgroundColor: minor.color }}
+              style={{ backgroundColor: major.color }}
             >
               <span className="text-xs leading-none text-white">
-                {minor.value}
+                {major.value}
               </span>
             </div>
-          )}
+
+            {minor && minor.value !== "NONE" && (
+              <div
+                className="w-min px-2 pb-0.5 rounded-full bg-black/10"
+                style={{ backgroundColor: minor.color }}
+              >
+                <span className="text-xs leading-none text-white">
+                  {minor.value}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <div className="p-2 rounded-lg bg-red-500 text-white cursor-pointer">
+          <div className="-mt-10 md:-mt-0 p-2 rounded-lg bg-red-500 text-white cursor-pointer self-end sm:self-auto">
             {isDeleting ? (
               <Loader size={16} className="animate-spin" />
             ) : (

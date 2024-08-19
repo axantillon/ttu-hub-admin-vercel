@@ -7,7 +7,9 @@ export default async function PastEvents() {
 
   return (
     <div className="relative flex flex-col h-full gap-6">
-      <BackButton />
+      <div className="z-50 relative -mt-[20px]">
+        <BackButton />
+      </div>
       <span className="text-3xl">
         {" "}
         <b>Past</b> Events @ TTUCR

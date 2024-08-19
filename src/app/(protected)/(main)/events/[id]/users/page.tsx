@@ -7,10 +7,10 @@ export default async function Event({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="absolute top-0 -ml-6 pt-6 w-full z-50">
+      <div className="z-50 relative -mt-[20px]">
         <BackButton />
       </div>
-      <span className="text-lg font-medium mt-[18px] mb-4">Registered</span>
+      <span className="text-lg font-medium mb-4">Registered</span>
       <UsersList users={users} />
     </div>
   );

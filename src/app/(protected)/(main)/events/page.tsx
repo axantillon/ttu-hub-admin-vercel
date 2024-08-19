@@ -21,7 +21,7 @@ export default async function Events() {
           </Link>
         </div>
 
-        <div className="relative flex w-full h-full gap-4 p-4 pt-0 overflow-auto">
+        <div className="relative flex w-full h-full gap-4 py-2 md:p-4 pt-0 overflow-auto">
           {events.length !== 0 ? (
             events
               .sort(

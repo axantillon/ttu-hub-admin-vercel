@@ -46,12 +46,12 @@ export function EventMessage({
   };
 
   return (
-    <div className="relative flex flex-col w-full rounded-xl shadow-sm shadow-gray-300 bg-white text-gray-500 px-6 py-4">
+    <div className="relative flex flex-col w-full rounded-xl shadow-sm shadow-gray-300 bg-white text-gray-500 px-4 sm:px-6 py-4">
       <div dangerouslySetInnerHTML={{ __html: message }} />
 
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <div className="absolute top-1 -right-10 flex items-center justify-center size-8 rounded-lg bg-red-500 hover:bg-red-700 text-white cursor-pointer">
+          <div className="absolute top-1 right-1 sm:-right-10 flex items-center justify-center size-8 rounded-lg bg-red-500 hover:bg-red-700 text-white cursor-pointer">
             {isDeleting ? (
               <Loader size={16} className="animate-spin" />
             ) : (
@@ -60,20 +60,20 @@ export function EventMessage({
           </div>
         </AlertDialogTrigger>
 
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-[90vw] sm:max-w-[425px]">
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you absolutely sure you want to delete this message?
+            <AlertDialogTitle className="text-lg sm:text-xl">
+              Are you sure you want to delete this message?
             </AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-sm sm:text-base">
               This action cannot be undone. This will permanently delete it from
               our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+            <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-red-500 hover:bg-red-800"
+              className="w-full sm:w-auto bg-red-500 hover:bg-red-800"
               onClick={handleDelete}
             >
               Delete

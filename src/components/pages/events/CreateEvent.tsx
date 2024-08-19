@@ -121,7 +121,7 @@ const CreateEvent: FC = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 max-w-2xl"
+            className="space-y-6 sm:space-y-8 max-w-2xl"
           >
             <FormTextInput
               control={form.control}
@@ -136,13 +136,13 @@ const CreateEvent: FC = () => {
               placeholder="description..."
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="startTime"
                 render={({ field }) => (
                   <FormItem className="flex flex-col justify-end">
-                      <FormLabel className="mb-1">Start Time </FormLabel>
+                    <FormLabel className="mb-1">Start Time</FormLabel>
                     <FormControl>
                       <DateTimePicker
                         value={field.value}
@@ -211,7 +211,7 @@ const CreateEvent: FC = () => {
                   <FormControl>
                     <Input
                       {...fieldProps}
-                      className="w-[250px]"
+                      className="w-full sm:w-[250px]"
                       type="file"
                       accept="image/*"
                       onChange={(event) =>
@@ -221,7 +221,7 @@ const CreateEvent: FC = () => {
                   </FormControl>
                   {value && (
                     <div
-                      className="relative flex items-end justify-between w-80 h-44 p-3 rounded-2xl shadow-md shadow-gray-400 bg-sky-500"
+                      className="relative flex items-end justify-between w-full sm:w-80 h-44 p-3 rounded-2xl shadow-md shadow-gray-400 bg-sky-500"
                       style={{
                         backgroundSize: "cover",
                         backgroundRepeat: "no-repeat",
@@ -254,7 +254,7 @@ const CreateEvent: FC = () => {
               )}
             /> */}
 
-            <Button disabled={loading} type="submit">
+            <Button disabled={loading} type="submit" className="w-full sm:w-auto">
               {loading ? "Creating Event..." : "Create Event"}
             </Button>
           </form>

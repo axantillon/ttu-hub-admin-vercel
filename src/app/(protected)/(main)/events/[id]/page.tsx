@@ -29,12 +29,12 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="absolute top-0 -ml-6 pt-6 w-full z-50">
+      <div className="z-50 relative -mt-[20px]">
         <BackButton />
       </div>
-      <div className="relative flex mt-4 py-4 px-6 bg-white rounded-xl gap-4">
-        <div className="flex flex-col w-1/2 gap-2">
-          <span className="text-2xl font-bold">{event.name}</span>
+      <div className="relative flex flex-col md:flex-row md:mt-4 py-4 px-4 md:px-6 bg-white rounded-xl gap-4">
+        <div className="flex flex-col w-full md:w-1/2 gap-2">
+          <span className="text-xl md:text-2xl font-bold">{event.name}</span>
 
           <Badge
             className="w-fit"
@@ -47,7 +47,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             {event.category}
           </Badge>
 
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <span className="text-sm text-gray-500">
               {formatInTimeZone(
                 event.startTime,
@@ -80,16 +80,20 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             </Link>
           </div>
 
-          <div className="flex flex-row w-full justify-between mt-auto">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row w-full justify-between mt-4 md:mt-auto gap-4 sm:gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-start">
               <EditEventModal event={event} />
               <DeleteEvent eventId={event.id} />
             </div>
-            <ShareLink text={`https://ttu-hub.vercel.app/event/${event.id}`} />
+            <div className="flex justify-start sm:justify-end w-full sm:w-auto">
+              <ShareLink
+                text={`https://ttu-hub.vercel.app/event/${event.id}`}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col w-1/2">
+        <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
           <div className="relative w-full aspect-[330/176] bg-sky-400 rounded-xl overflow-clip">
             <Image
               src={event.coverImg || ""}
@@ -101,7 +105,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
         </div>
       </div>
 
-      <div className="flex flex-col w-[390px] mx-auto py-4 gap-y-4">
+      <div className="flex flex-col w-full md:w-[390px] mx-auto py-4 gap-y-4">
         <SendEventMessage eventId={event.id} />
         {event.messages
           .slice()

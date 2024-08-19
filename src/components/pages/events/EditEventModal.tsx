@@ -113,7 +113,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
       <DialogTrigger asChild>
         <Button className="w-fit">Edit Event</Button>
       </DialogTrigger>
-      <DialogContent className="bg-white sm:max-w-[600px] h-[calc(100vh-6rem)] pb-4">
+      <DialogContent className="bg-white w-[95vw] sm:max-w-[600px] h-[90vh] sm:h-[calc(100vh-6rem)] p-4 sm:p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>
@@ -122,8 +122,8 @@ export function EditEventModal({ event }: EditEventModalProps) {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-8 h-[80%] mb-4 pb-6 px-2 pr-4 overflow-y-auto">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+            <div className="space-y-4 sm:space-y-6 h-[calc(90vh-12rem)] sm:h-[calc(100vh-16rem)] overflow-y-auto px-2">
               <FormTextInput
                 control={form.control}
                 name="name"
@@ -137,13 +137,13 @@ export function EditEventModal({ event }: EditEventModalProps) {
                 placeholder="description..."
               />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
                   name="startTime"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="startTime">Start Time </FormLabel>
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel>Start Time</FormLabel>
                       <FormControl>
                         <DateTimePicker
                           value={field.value}
@@ -212,7 +212,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
                     <FormControl>
                       <Input
                         {...fieldProps}
-                        className="w-[250px]"
+                        className="w-full sm:w-[250px]"
                         type="file"
                         accept="image/*"
                         onChange={(event) =>
@@ -226,7 +226,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
             </div>
 
             <DialogFooter>
-              <Button disabled={loading} type="submit">
+              <Button disabled={loading} type="submit" className="w-full sm:w-auto">
                 {loading ? "Saving..." : "Save Changes"}
               </Button>
             </DialogFooter>
