@@ -94,7 +94,7 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
                 />
               </svg>
 
-              <span className="pl-0.5 text-xs font-bold text-gray-500 -mb-0.5">
+              <span className="pl-0.5 text-xs font-bold text-gray-500 -mb-0.5 line-clamp-1">
                 {event.location}
               </span>
             </div>
