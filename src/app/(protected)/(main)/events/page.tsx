@@ -1,5 +1,5 @@
 import CreateEvent from "@/components/pages/events/CreateEvent";
-import { EventItem } from "@/components/pages/events/EventItem";
+import EventList from "@/components/pages/events/EventList";
 import { Button } from "@/components/ui/shadcn/button";
 import { getAllEvents } from "@/db/event";
 import Link from "next/link";
@@ -21,19 +21,7 @@ export default async function Events() {
           </Link>
         </div>
 
-        <div className="relative flex w-full h-full gap-4 py-2 md:p-4 pt-0 overflow-auto">
-          {events.length !== 0 ? (
-            events
-              .sort(
-                (a, b) =>
-                  new Date(a.startTime).getTime() -
-                  new Date(b.startTime).getTime()
-              )
-              .map((event) => <EventItem event={event} key={event.id} />)
-          ) : (
-            <span>No events</span>
-          )}
-        </div>
+        <EventList events={events} />
       </div>
 
       <CreateEvent />
