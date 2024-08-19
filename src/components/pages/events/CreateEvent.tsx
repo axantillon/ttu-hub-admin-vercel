@@ -1,4 +1,11 @@
 "use client";
+
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+// Import UI components
 import { Button } from "@/components/ui/shadcn/button";
 import {
   Card,
@@ -25,16 +32,20 @@ import {
   SelectValue,
 } from "@/components/ui/shadcn/select";
 import { toast } from "@/components/ui/shadcn/use-toast";
+import { Checkbox } from "@/components/ui/shadcn/checkbox";
+
+// Import custom components
 import { FormTextArea } from "@/components/utils/formInputs/FormTextArea";
 import { FormTextInput } from "@/components/utils/formInputs/FormTextInput";
+
+// Import utility functions and constants
 import { createEvent } from "@/db/event";
 import { uploadEventsImage } from "@/lib/utils";
 import { EVENT_CATEGORIES } from "@/lib/utils/consts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { usePrivy } from "@privy-io/react-auth";
+import { sendNewEventEmail } from "@/components/utils/Email";
 
+// Define the form schema
 const FormSchema = z.object({
   name: z.string({ required_error: "Name is required" }).min(1),
   description: z.string({ required_error: "Description is required" }),
@@ -43,9 +54,13 @@ const FormSchema = z.object({
   organizer: z.string({ required_error: "Organizer is required" }).min(1),
   coverImg: z.any(),
   category: z.string({ required_error: "Category is required" }),
+  sendAsEmail: z.boolean(),
 });
 
-const CreateEvent: FC = ({}) => {
+const CreateEvent: FC = () => {
+  const [loading, setLoading] = useState(false);
+  const { user } = usePrivy();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -55,10 +70,9 @@ const CreateEvent: FC = ({}) => {
       location: "",
       organizer: "",
       category: "",
+      sendAsEmail: true,
     },
   });
-
-  const [loading, setLoading] = useState(false);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
@@ -69,7 +83,7 @@ const CreateEvent: FC = ({}) => {
         data.name,
         data.category
       );
-      createEvent({ ...data, coverImg: imgPath! })
+      createEvent({ ...data, coverImg: imgPath! }, user?.email?.address!)
         .then(() => {
           form.reset();
           toast({
@@ -128,7 +142,7 @@ const CreateEvent: FC = ({}) => {
                 name="startTime"
                 render={({ field }) => (
                   <FormItem className="flex flex-col justify-end">
-                    <FormLabel className="mb-1">Start Time </FormLabel>
+                      <FormLabel className="mb-1">Start Time </FormLabel>
                     <FormControl>
                       <DateTimePicker
                         value={field.value}
@@ -221,6 +235,25 @@ const CreateEvent: FC = ({}) => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="sendAsEmail"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 px-0.5">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Send as Email</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+
             <Button disabled={loading} type="submit">
               {loading ? "Creating Event..." : "Create Event"}
             </Button>
