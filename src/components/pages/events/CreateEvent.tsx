@@ -54,7 +54,7 @@ const FormSchema = z.object({
   organizer: z.string({ required_error: "Organizer is required" }).min(1),
   coverImg: z.any(),
   category: z.string({ required_error: "Category is required" }),
-  sendAsEmail: z.boolean(),
+  // sendAsEmail: z.boolean(),
 });
 
 const CreateEvent: FC = () => {
@@ -70,7 +70,7 @@ const CreateEvent: FC = () => {
       location: "",
       organizer: "",
       category: "",
-      sendAsEmail: true,
+      // sendAsEmail: true,
     },
   });
 
@@ -236,7 +236,7 @@ const CreateEvent: FC = () => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="sendAsEmail"
               render={({ field }) => (
@@ -252,7 +252,7 @@ const CreateEvent: FC = () => {
                   </div>
                 </FormItem>
               )}
-            />
+            /> */}
 
             <Button disabled={loading} type="submit">
               {loading ? "Creating Event..." : "Create Event"}
