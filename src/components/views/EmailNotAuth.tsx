@@ -5,7 +5,7 @@ export const EmailNotAuth = () => (
   <main className="relative h-dvh w-dvw flex flex-col items-center justify-center space-y-4">
     <div className="relative w-2/3 h-32 aspect-auto">
       <Image
-        src="general/LogoSTL.png"
+        src="general/LogoSTL.svg"
         alt=""
         fill
         style={{

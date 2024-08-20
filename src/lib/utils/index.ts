@@ -7,7 +7,7 @@ export const getDegreeByKey = (key: string) =>
   DegreeList.find((degree) => degree.value === key);
 
 export const isAllowedEmail = (email: string) =>
-  (AUTHORIZED_EMAILS || "").includes(email);
+  process.env.NODE_ENV === "development" || AUTHORIZED_EMAILS.includes(email);
 
 export const detectOS = () => {
   let userAgent = window.navigator.userAgent,
@@ -125,8 +125,8 @@ export const base64ToFile = (base64String: string, filename: string) => {
   }
 
   // Create a Blob from the array buffer
-  const blob = new Blob([arrayBuffer], { type: 'image/webp' });
+  const blob = new Blob([arrayBuffer], { type: "image/webp" });
 
   // Create a File object from the Blob
-  return new File([blob], filename, { type: 'image/webp' });
+  return new File([blob], filename, { type: "image/webp" });
 };
