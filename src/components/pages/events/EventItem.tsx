@@ -23,7 +23,7 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
             src={event.coverImg || ""}
             fill
             alt=""
-            className="absolute top-0 left-0 aspect-auto object-cover bg-sky-400"
+            className="absolute top-0 left-0 aspect-auto object-cover bg-gray-200"
           />
           <Badge
             className="z-10"

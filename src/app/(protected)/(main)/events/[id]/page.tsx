@@ -94,7 +94,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
         </div>
 
         <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
-          <div className="relative w-full aspect-[330/176] bg-sky-400 rounded-xl overflow-clip">
+          <div className="relative w-full aspect-[330/176] bg-gray-200 rounded-xl overflow-clip">
             <Image
               src={event.coverImg || ""}
               fill
