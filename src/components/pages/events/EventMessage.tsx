@@ -32,16 +32,20 @@ export function EventMessage({
     setIsDeleting(true);
     removeEventMessage(eventId, index)
       .then(() => {
+        toast({
+          title: "Message Deleted",
+          description: "Message has been successfully deleted.",
+        });
         setIsDeleting(false);
       })
       .catch(() => {
-        setIsDeleting(false);
         toast({
           variant: "destructive",
           title: "Failed to delete message",
           description:
             "An error occurred while deleting the message. Try again.",
         });
+        setIsDeleting(false);
       });
   };
 
