@@ -91,9 +91,7 @@ export const uploadEventsImage = async (
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(
-      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${
-        file.name
-      }`,
+      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${resizedFile.name.replace(/\s/g, "")}`,
       resizedFile,
       {
         upsert: true,

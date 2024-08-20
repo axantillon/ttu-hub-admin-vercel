@@ -3,6 +3,7 @@
 import { sendNewEventEmail, sendUpdateEmail } from "@/components/utils/Email";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export async function getAllEvents(pastEvents: boolean = false) {
   const events = await prisma.event.findMany({
@@ -196,8 +197,52 @@ export async function removeEventMessage(id: string, messageIndex: number) {
 }
 
 export async function deleteEvent(id: string) {
-  await prisma.event.delete({
-    where: { id },
-  });
-  revalidatePath("/events");
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id },
+      select: { name: true, category: true }
+    });
+
+    if (event) {
+      const supabase = createClientComponentClient();
+      const bucket = "events";
+      const folderPath = `${(event.category || "").replace(/\s/g, "")}/${event.name.replace(/\s/g, "")}`;
+
+      // List all files in the folder
+      const { data: files, error: listError } = await supabase.storage
+        .from(bucket)
+        .list(folderPath);
+
+      if (listError) {
+        console.error("Error listing files:", listError);
+        throw new Error("Failed to list files in the event folder");
+      }
+
+      if (files && files.length > 0) {
+        // Delete all files in the folder
+        const filesToDelete = files.map(file => `${folderPath}/${file.name}`);
+        const { error: deleteError } = await supabase.storage
+          .from(bucket)
+          .remove(filesToDelete);
+
+        if (deleteError) {
+          console.error("Error deleting files:", deleteError);
+          throw new Error("Failed to delete files in the event folder");
+        }
+
+        console.log(`Successfully deleted ${filesToDelete.length} files from folder: ${folderPath}`);
+      } else {
+        console.log(`No files found in folder: ${folderPath}`);
+      }
+    }
+
+    await prisma.event.delete({
+      where: { id },
+    });
+    
+    revalidatePath("/events");
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    throw new Error("Failed to delete event");
+  }
 }
