@@ -19,13 +19,13 @@ export default function EventList({ events }: { events: EventWithUsers[] }) {
   );
 
   return (
-    <div className={`relative flex-col md:flex-row w-full h-full py-2`}>
+    <div className={`relative flex-col md:flex-row w-full h-full py-2 md:-mt-4`}>
       <Button
         variant="outline"
         size="icon"
         onClick={() => setIsGridView(!isGridView)}
         aria-label={isGridView ? "Switch to list view" : "Switch to grid view"}
-        className="z-10 relative -mt-6 md:mt-0 mb-2 md:mb-0 md:absolute md:top-2 md:right-0"
+        className="z-10 relative -mt-6 mb-2"
       >
         {isGridView ? (
           <List className="h-4 w-4" />
