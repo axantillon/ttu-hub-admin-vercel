@@ -85,6 +85,8 @@ export function EditEventModal({ event }: EditEventModalProps) {
           description: "Failed to upload image",
           variant: "destructive",
         });
+        setLoading(false);
+        return;
       }
     }
 
@@ -103,9 +105,11 @@ export function EditEventModal({ event }: EditEventModalProps) {
           description: "Failed to update event",
           variant: "destructive",
         });
+      })
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
       });
-    setLoading(false);
-    setOpen(false);
   }
 
   return (
@@ -122,7 +126,10 @@ export function EditEventModal({ event }: EditEventModalProps) {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 sm:space-y-6"
+          >
             <div className="space-y-4 sm:space-y-6 h-[calc(90vh-12rem)] sm:h-[calc(100vh-16rem)] overflow-y-auto px-2">
               <FormTextInput
                 control={form.control}
@@ -226,7 +233,11 @@ export function EditEventModal({ event }: EditEventModalProps) {
             </div>
 
             <DialogFooter>
-              <Button disabled={loading} type="submit" className="w-full sm:w-auto">
+              <Button
+                disabled={loading}
+                type="submit"
+                className="w-full sm:w-auto"
+              >
                 {loading ? "Saving..." : "Save Changes"}
               </Button>
             </DialogFooter>
