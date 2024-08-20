@@ -77,6 +77,8 @@ const Email = ({
     EVENT_CATEGORIES.find((cat) => cat.name === event.category)?.color ||
     "#000000";
 
+  const imgUrl = event.coverImg ? `https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?quality=75)` : "";
+
   return (
     <Html>
       <Head />
@@ -85,7 +87,7 @@ const Email = ({
         <div style={container}>
           <img
             style={coverImageStyle}
-            src={`https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?quality=75)`}
+            src={imgUrl}
             alt="Event Cover"
           />
           <div style={eventInfoContainer}>
