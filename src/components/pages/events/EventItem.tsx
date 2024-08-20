@@ -72,7 +72,7 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
 
           <Separator orientation="vertical" className="h-20" />
 
-          <div className="flex flex-col items-left justify-center w-2/3 h-full px-3 py-1 space-y-2">
+          <div className="flex flex-col items-left justify-evenly w-2/3 h-full px-3 py-1">
             <div className="flex flex-row test-xs font-bold text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,16 +94,16 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
                 />
               </svg>
 
-              <span className="pl-0.5 text-xs font-bold text-gray-500 -mb-0.5 line-clamp-1">
+              <span className="pl-0.5 text-xs font-bold text-gray-500 line-clamp-1">
                 {event.location}
               </span>
             </div>
 
-            <span className="text-lg font-bold leading-none line-clamp-2">
+            <span className="text-lg font-bold leading-tight line-clamp-2">
               {event.name}
             </span>
 
-            <p className="text-xs font-medium text-slate-800 leading-tight line-clamp-2 pb-0.5">
+            <p className="text-xs font-medium text-slate-800 line-clamp-2 mb-1">
               {event.description}
             </p>
           </div>
