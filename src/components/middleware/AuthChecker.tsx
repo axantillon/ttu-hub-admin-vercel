@@ -21,10 +21,6 @@ const AuthChecker: FC<{ children: ReactNode }> = ({ children }) => {
     return <SplashScreen />;
   }
 
-  if (ready && !authenticated) {
-    return <SplashScreen />;
-  }
-
   if (
     PrivyUser &&
     PrivyUser.email &&
