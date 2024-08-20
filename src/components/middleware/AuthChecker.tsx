@@ -1,7 +1,7 @@
 "use client";
 import { isAllowedEmail } from "@/lib/utils";
 import { usePrivy } from "@privy-io/react-auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 import { FC, ReactNode, useEffect } from "react";
 import { EmailNotAuth } from "../views/EmailNotAuth";
 import { SplashScreen } from "../views/SplashScreen";

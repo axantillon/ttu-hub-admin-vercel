@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils/cn";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRouter } from 'next/navigation';
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { Calendar, Menu, Users } from "react-feather";
 
@@ -13,7 +12,6 @@ const NavBar: FC<NavBarProps> = ({}) => {
   const activePath = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -34,15 +32,14 @@ const NavBar: FC<NavBarProps> = ({}) => {
   }, [activePath]);
 
   return (
-    <>
+    <div ref={navRef} className="relative">
       <button
-        className="md:hidden fixed top-6 left-4 z-30 flex items-center justify-center w-[38px] h-[38px] bg-white border border-stone-200 rounded-lg cursor-pointer"
+        className="md:hidden fixed top-6 left-4 z-50 flex items-center justify-center w-[38px] h-[38px] bg-white border border-stone-200 rounded-lg cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <Menu size={20} />
       </button>
       <div
-        ref={navRef}
         className={cn(
           "z-20 fixed md:relative flex flex-col w-64 md:w-48 h-dvh py-8 px-4 bg-white gap-2 transition-transform duration-300 ease-in-out",
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -71,7 +68,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
           <span>Users</span>
         </NavIcon>
       </div>
-    </>
+    </div>
   );
 };
 

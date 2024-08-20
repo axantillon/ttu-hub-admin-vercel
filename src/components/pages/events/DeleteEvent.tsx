@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/shadcn/button";
 import { useToast } from "@/components/ui/shadcn/use-toast";
 import { deleteEvent } from "@/db/event";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 import { FC, useState } from "react";
 import { Loader, Trash2 } from "react-feather";
 

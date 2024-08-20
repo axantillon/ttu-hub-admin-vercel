@@ -2,7 +2,7 @@
 
 import { Skeleton } from "@/components/ui/shadcn/skeleton";
 import { NavPath } from "@/lib/types";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 
 export default function Home() {
   const router = useRouter();

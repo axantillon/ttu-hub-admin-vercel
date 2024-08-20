@@ -2,10 +2,10 @@
 
 import { NavPath } from "@/lib/types";
 import { useLogin, usePrivy } from "@privy-io/react-auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 import { useState } from "react";
-import { Button } from "../ui/shadcn/button";
 import { Loader } from "react-feather";
+import { Button } from "../ui/shadcn/button";
 
 const LoginBtn = () => {
   const { ready, authenticated } = usePrivy();
