@@ -87,7 +87,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             </div>
             <div className="flex justify-start sm:justify-end w-full sm:w-auto">
               <ShareLink
-                text={`https://ttu-hub.vercel.app/event/${event.id}`}
+                text={`https://ttucr-hub.app/event/${event.id}`}
               />
             </div>
           </div>
@@ -95,12 +95,12 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
 
         <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
           <div className="relative w-full aspect-[330/176] bg-gray-200 rounded-xl overflow-clip">
-            <Image
-              src={event.coverImg || ""}
+            {event.coverImg && <Image
+              src={event.coverImg}
               fill
               alt=""
               className="aspect-auto object-cover"
-            />
+            />}
           </div>
         </div>
       </div>

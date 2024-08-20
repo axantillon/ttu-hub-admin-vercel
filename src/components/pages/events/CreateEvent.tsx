@@ -92,8 +92,9 @@ const CreateEvent: FC = () => {
           form.reset();
           toast({
             title: "New Event Created! 🎉",
-            description: <span className="font-bold">{data.name}</span>,
+            description: <span className="font-bold">{e.name}</span>,
           });
+          setLoading(false);
         })
         .catch((error) => {
           console.error(error);
@@ -110,7 +111,6 @@ const CreateEvent: FC = () => {
         variant: "destructive",
       });
     }
-    setLoading(false);
   }
 
   return (

@@ -117,7 +117,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
       <DialogTrigger asChild>
         <Button className="w-fit">Edit Event</Button>
       </DialogTrigger>
-      <DialogContent className="bg-white w-[95vw] sm:max-w-[600px] h-[90vh] sm:h-[calc(100vh-6rem)] p-4 sm:p-6 rounded-lg">
+      <DialogContent className="bg-white w-[95dvw] sm:max-w-[600px] h-[90dvh] sm:h-[calc(100dvh-6rem)] p-4 sm:p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>

@@ -77,7 +77,7 @@ const Email = ({
     EVENT_CATEGORIES.find((cat) => cat.name === event.category)?.color ||
     "#000000";
 
-  const imgUrl = event.coverImg ? `https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?quality=75)` : "";
+  const imgUrl = event.coverImg ? `https://yyccawyordfhdjblwusu.supabase.co/storage/v1/object/public/${event.coverImg}?quality=75)` : null;
 
   return (
     <Html>
@@ -85,11 +85,14 @@ const Email = ({
       <Preview>{subject}</Preview>
       <div style={main}>
         <div style={container}>
-          <img
+          {imgUrl ? <img
             style={coverImageStyle}
             src={imgUrl}
             alt="Event Cover"
           />
+          :
+            <div style={coverImageStyle} />
+          }
           <div style={eventInfoContainer}>
             <div style={dateAndCategoryContainer}>
               <div style={dateBoxStyle}>
@@ -251,12 +254,13 @@ const dateStyle = {
 };
 
 const coverImageStyle = {
-  maxHeight: "176px",
+  height: "176px",
   aspectRatio: "330/176",
   borderRadius: "0 0 12px 12px",
   objectFit: "cover" as const,
   margin: "0 auto",
   width: "100%",
+  backgroundColor: "#D1D5DB",
 };
 
 const eventInfoContainer = {

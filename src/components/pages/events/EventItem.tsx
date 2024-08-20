@@ -18,13 +18,13 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
   return (
     <Link prefetch={true} href={`/events/${event.id}`}>
       <div className="flex flex-col gap-y-1 w-[330px] h-[290px] rounded-2xl shadow-sm shadow-gray-300 bg-white ">
-        <div className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 overflow-clip">
-          <Image
-            src={event.coverImg || ""}
+        <div className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 bg-gray-200 overflow-clip">
+          {event.coverImg && <Image
+            src={event.coverImg}
             fill
             alt=""
-            className="absolute top-0 left-0 aspect-auto object-cover bg-gray-200"
-          />
+            className="absolute top-0 left-0 aspect-auto object-cover"
+          />}
           <Badge
             className="z-10"
             style={{
