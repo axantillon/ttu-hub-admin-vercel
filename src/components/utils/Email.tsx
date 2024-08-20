@@ -17,7 +17,7 @@ export async function sendNewEventEmail(event: Event, sender: string) {
 
   const e = await resend.emails.send({
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
-    to: emails,
+    to: "andres.antillon@ttu.edu", //emails,
     subject: `${event.name} - Check it out!`,
     bcc: sender,
     react: (
@@ -44,7 +44,7 @@ export async function sendUpdateEmail(
 ) {
   const e = await resend.emails.send({
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
-    to: emails,
+    to: "andres.antillon@ttu.edu", //emails,
     subject: `${event.name} - New message`,
     bcc: sender,
     react: (
@@ -85,14 +85,11 @@ const Email = ({
       <Preview>{subject}</Preview>
       <div style={main}>
         <div style={container}>
-          {imgUrl ? <img
-            style={coverImageStyle}
-            src={imgUrl}
-            alt="Event Cover"
-          />
-          :
+          {imgUrl ? (
+            <img style={coverImageStyle} src={imgUrl} alt="Event Cover" />
+          ) : (
             <div style={coverImageStyle} />
-          }
+          )}
           <div style={eventInfoContainer}>
             <div style={dateAndCategoryContainer}>
               <div style={dateBoxStyle}>
@@ -133,17 +130,18 @@ const Email = ({
             <div style={eventDetailsContainer}>
               <span style={eventNameStyle}>{event.name}</span>
               <span style={eventLocationStyle}>{event.location}</span>
-              <span style={eventDescriptionStyle}>{event.description}</span>
+              {message && <span style={eventDescriptionStyle} title={event.description}>{event.description}</span>}
               <div style={{ ...badgeStyle, backgroundColor: badgeColor }}>
                 {event.category}
               </div>
             </div>
           </div>
+
           {message ? (
             <>
-              <span style={titleStyle}>
+              <p style={titleStyle}>
                 There&apos;s a new message for this event...
-              </span>
+              </p>
               <div
                 style={messageBox}
                 dangerouslySetInnerHTML={{
@@ -155,7 +153,7 @@ const Email = ({
               />
             </>
           ) : (
-            <span style={titleStyle}>There&apos;s a new event going on!</span>
+            <p style={titleStyle}>{event.description}</p>
           )}
           <br />
           <a href={`https://ttucr-hub.app/event/${event.id}`} style={linkStyle}>
@@ -204,7 +202,7 @@ const footer = {
 
 const titleStyle = {
   fontSize: "16px",
-  margin: "32px 24px 16px",
+  margin: "16px 24px",
 };
 
 const timeBoxStyle = {
@@ -295,7 +293,13 @@ const eventLocationStyle = {
   marginBottom: "6px",
 };
 
-const eventDescriptionStyle = dayStyle;
+const eventDescriptionStyle = {
+  ...dayStyle,
+  maxWidth: '2750px', // Adjust this value as needed
+  whiteSpace: 'nowrap' as const,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+};
 
 const badgeStyle = {
   width: "fit-content",

@@ -35,7 +35,7 @@ const DeleteEvent: FC<DeleteEventProps> = ({ eventId }) => {
         title: "Event Deleted",
         description: `Event has been successfully deleted.`,
       });
-      router.push("/events");
+      router.back();
     } catch (error) {
       console.error("Failed to delete event:", error);
       toast({
