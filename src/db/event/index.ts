@@ -36,25 +36,37 @@ export async function getEventById(id: string) {
   return event;
 }
 
-export async function createEvent(data: {
-  name: string;
-  description: string;
-  startTime: Date;
-  location: string;
-  organizer: string;
-    coverImg: string;
+export async function createEvent(
+  data: {
+    name: string;
+    description: string;
+    startTime: Date;
+    location: string;
+    organizer: string;
+    coverImg: string | null;
   },
+  sendAsEmail: boolean,
   sender: string
 ) {
-  try {
-    await prisma.event.create({
+  const event = await prisma.event
+    .create({
       data,
+    })
+    .catch((e) => {
+      console.error(e);
+      throw new Error("Failed to create event");
     });
-    revalidatePath("/events");
-  } catch (e) {
-    console.error(e);
-    throw new Error("Failed to create event");
+
+  if (sendAsEmail) {
+    await sendNewEventEmail(event, sender).catch(async (e) => {
+      console.error(e);
+      await deleteEvent(event.id);
+      throw new Error("Failed to send email");
+    });
   }
+
+  revalidatePath("/events");
+  return event;
 }
 
 export async function updateEvent(
@@ -124,12 +136,7 @@ export async function addEventMessage(
         event.users.map((user) => `${user.username}@ttu.edu`) || [];
 
       if (emails.length > 0) {
-        await sendUpdateEmail(
-          sender,
-          emails,
-          message,
-          event
-        ).catch(
+        await sendUpdateEmail(sender, emails, message, event).catch(
           // Remove the message if email sending fails
           async (e) => {
             console.error("Failed to send email:", e);

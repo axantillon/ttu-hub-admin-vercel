@@ -1,8 +1,8 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 // Import UI components
@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/shadcn/card";
+import { Checkbox } from "@/components/ui/shadcn/checkbox";
 import { DateTimePicker } from "@/components/ui/shadcn/DateTimePicker";
 import {
   Form,
@@ -32,7 +33,6 @@ import {
   SelectValue,
 } from "@/components/ui/shadcn/select";
 import { toast } from "@/components/ui/shadcn/use-toast";
-import { Checkbox } from "@/components/ui/shadcn/checkbox";
 
 // Import custom components
 import { FormTextArea } from "@/components/utils/formInputs/FormTextArea";
@@ -43,7 +43,6 @@ import { createEvent } from "@/db/event";
 import { uploadEventsImage } from "@/lib/utils";
 import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 import { usePrivy } from "@privy-io/react-auth";
-import { sendNewEventEmail } from "@/components/utils/Email";
 
 // Define the form schema
 const FormSchema = z.object({
@@ -54,12 +53,12 @@ const FormSchema = z.object({
   organizer: z.string({ required_error: "Organizer is required" }).min(1),
   coverImg: z.any(),
   category: z.string({ required_error: "Category is required" }),
-  // sendAsEmail: z.boolean(),
 });
 
 const CreateEvent: FC = () => {
   const [loading, setLoading] = useState(false);
   const { user } = usePrivy();
+  const [sendAsEmail, setSendAsEmail] = useState(true);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -70,32 +69,37 @@ const CreateEvent: FC = () => {
       location: "",
       organizer: "",
       category: "",
-      // sendAsEmail: true,
     },
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
-    let imgPath;
+    let imgPath: string | null = null;
     try {
-      imgPath = await uploadEventsImage(
-        data.coverImg,
-        data.name,
-        data.category
-      );
-      createEvent({ ...data, coverImg: imgPath! }, user?.email?.address!)
-        .then(() => {
+      if (data.coverImg) {
+        imgPath = await uploadEventsImage(
+          data.coverImg,
+          data.name,
+          data.category
+        );
+      }
+      createEvent(
+        { ...data, coverImg: imgPath! },
+        sendAsEmail,
+        user?.email?.address!
+      )
+        .then((e) => {
           form.reset();
           toast({
-            title: "New Event Created!",
-            description: <span className="font-bold">{data.name} 🎉</span>,
+            title: "New Event Created! 🎉",
+            description: <span className="font-bold">{data.name}</span>,
           });
         })
         .catch((error) => {
           console.error(error);
           toast({
             title: "Error",
-            description: "Failed to create event",
+            description: "Failed to create event - " + error.message,
             variant: "destructive",
           });
         });
@@ -236,25 +240,27 @@ const CreateEvent: FC = () => {
               )}
             />
 
-            {/* <FormField
-              control={form.control}
-              name="sendAsEmail"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 px-0.5">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Send as Email</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            /> */}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="sendAsEmail"
+                checked={sendAsEmail}
+                onCheckedChange={(checked) =>
+                  setSendAsEmail(checked as boolean)
+                }
+              />
+              <label
+                htmlFor="sendAsEmail"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Send as email
+              </label>
+            </div>
 
-            <Button disabled={loading} type="submit" className="w-full sm:w-auto">
+            <Button
+              disabled={loading}
+              type="submit"
+              className="w-full sm:w-auto"
+            >
               {loading ? "Creating Event..." : "Create Event"}
             </Button>
           </form>

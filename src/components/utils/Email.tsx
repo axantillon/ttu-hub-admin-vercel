@@ -12,6 +12,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email Functions
 export async function sendNewEventEmail(event: Event, sender: string) {
+
   const emails = (await getAllUsers()).map((u) => `${u.username}@ttu.edu`);
 
   const e = await resend.emails.send({
