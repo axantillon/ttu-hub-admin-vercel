@@ -76,6 +76,20 @@ const resizeImage = (file: File): Promise<File> => {
   });
 };
 
+export const sanitizePathSegment = (segment: string): string => {
+  return segment
+    .replace(/[^a-z0-9]/gi, '_')  // Replace non-alphanumeric characters with underscore
+    .replace(/_+/g, '_')          // Replace multiple underscores with a single one
+    .replace(/^_|_$/g, '')        // Remove leading and trailing underscores
+    .toLowerCase()                // Convert to lowercase
+    .slice(0, 50);                // Limit length to 50 characters
+};
+
+export const getFileExtension = (filename: string): string => {
+  const parts = filename.split('.');
+  return parts.length > 1 ? `.${parts[parts.length - 1].toLowerCase()}` : '';
+};
+
 export const uploadEventsImage = async (
   file: File,
   eventName: string,
@@ -87,16 +101,18 @@ export const uploadEventsImage = async (
 
   const resizedFile = await resizeImage(file);
 
-  // Call Storage API to upload file
+  const sanitizedCategory = sanitizePathSegment(eventCategory);
+  const sanitizedEventName = sanitizePathSegment(eventName);
+  const fileExtension = getFileExtension(resizedFile.name);
+  const sanitizedFileName = `${sanitizePathSegment(resizedFile.name.slice(0, -fileExtension.length))}${fileExtension}`;
+
+  const uploadPath = `${sanitizedCategory}/${sanitizedEventName}/${sanitizedFileName}`;
+
   const { data, error } = await supabase.storage
     .from(bucket)
-    .upload(
-      `${eventCategory.replace(/\s/g, "")}/${eventName.replace(/\s/g, "")}/${resizedFile.name.replace(/\s/g, "")}`,
-      resizedFile,
-      {
-        upsert: true,
-      }
-    );
+    .upload(uploadPath, resizedFile, {
+      upsert: true,
+    });
 
   // Handle error if upload failed
   if (error) {

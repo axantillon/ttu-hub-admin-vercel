@@ -17,7 +17,7 @@ export async function sendNewEventEmail(event: Event, sender: string) {
 
   const e = await resend.emails.send({
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
-    to: "andres.antillon@ttu.edu", //emails,
+    to: emails,
     subject: `${event.name} - Check it out!`,
     bcc: sender,
     react: (
@@ -44,7 +44,7 @@ export async function sendUpdateEmail(
 ) {
   const e = await resend.emails.send({
     from: "TTU@CR Hub <updates@ttucr-hub.app>",
-    to: "andres.antillon@ttu.edu", //emails,
+    to: emails,
     subject: `${event.name} - New message`,
     bcc: sender,
     react: (

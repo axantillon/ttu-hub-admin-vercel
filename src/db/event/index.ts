@@ -4,6 +4,7 @@ import { sendNewEventEmail, sendUpdateEmail } from "@/components/utils/Email";
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { sanitizePathSegment } from "@/lib/utils"; // Assuming we've moved the sanitization function to a utils file
 
 export async function getAllEvents(pastEvents: boolean = false) {
   const events = await prisma.event.findMany({
@@ -206,7 +207,9 @@ export async function deleteEvent(id: string) {
     if (event) {
       const supabase = createClientComponentClient();
       const bucket = "events";
-      const folderPath = `${(event.category || "").replace(/\s/g, "")}/${event.name.replace(/\s/g, "")}`;
+      const sanitizedCategory = sanitizePathSegment(event.category || "");
+      const sanitizedEventName = sanitizePathSegment(event.name);
+      const folderPath = `${sanitizedCategory}/${sanitizedEventName}`;
 
       // List all files in the folder
       const { data: files, error: listError } = await supabase.storage
