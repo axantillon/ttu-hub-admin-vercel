@@ -65,11 +65,11 @@ export const EVENT_CATEGORIES = [
   },
   {
     name: "Sustainability Week",
-    color: "#FFFF00",
+    color: "#008000",
   },
   {
     name: "Management Week",
-    color: "#008000",
+    color: "#4B0082", // Updated color to Indigo
   },
   {
     name: "Engineering Week",
