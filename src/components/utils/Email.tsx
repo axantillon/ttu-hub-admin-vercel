@@ -131,9 +131,11 @@ const Email = ({
               <span style={eventNameStyle}>{event.name}</span>
               <span style={eventLocationStyle}>{event.location}</span>
               {message && <span style={eventDescriptionStyle} title={event.description}>{event.description}</span>}
-              <div style={{ ...badgeStyle, backgroundColor: badgeColor }}>
-                {event.category}
-              </div>
+              {event.category && (
+                <div style={{ ...badgeStyle, backgroundColor: badgeColor }}>
+                  {event.category}
+                </div>
+              )}
             </div>
           </div>
 

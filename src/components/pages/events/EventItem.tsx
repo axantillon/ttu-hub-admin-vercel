@@ -25,16 +25,18 @@ export const EventItem: FC<EventItemProps> = ({ event }) => {
             alt=""
             className="absolute top-0 left-0 aspect-auto object-cover"
           />}
-          <Badge
-            className="z-10"
-            style={{
+          {event.category && (
+            <Badge
+              className="z-10"
+              style={{
               backgroundColor: EVENT_CATEGORIES.find(
-                (cat) => cat.name === event.category
-              )?.color,
-            }}
-          >
-            {event.category}
-          </Badge>
+                  (cat) => cat.name === event.category
+                )?.color,
+              }}
+            >
+              {event.category}
+            </Badge>
+          )}
           {event.users && event.users.length !== 0 && (
             <AvatarCircles
               className="-space-x-6 *:bg-white *:text-black *:shadow-lg "

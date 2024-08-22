@@ -36,16 +36,18 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
         <div className="flex flex-col w-full md:w-1/2 gap-2">
           <span className="text-xl md:text-2xl font-bold">{event.name}</span>
 
-          <Badge
-            className="w-fit"
-            style={{
+          {event.category && (
+            <Badge
+              className="w-fit"
+              style={{
               backgroundColor: EVENT_CATEGORIES.find(
                 (cat) => cat.name === event.category
               )?.color,
             }}
           >
-            {event.category}
-          </Badge>
+              {event.category}
+            </Badge>
+          )}
 
           <div className="flex flex-col md:flex-row gap-2">
             <span className="text-sm text-gray-500">
