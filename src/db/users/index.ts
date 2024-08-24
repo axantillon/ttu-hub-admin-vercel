@@ -56,3 +56,27 @@ export async function deleteUserByUsername(username: string) {
   revalidatePath("/users");
   return user;
 }
+
+export async function toggleUserAttendEvent(username: string, eventId: string, isAttending: boolean) {
+  const updatedAttendance = await prisma.eventAttendance.upsert({
+    where: {
+      username_eventId: {
+        username: username,
+        eventId: eventId,
+      },
+    },
+    create: {
+      username: username,
+      eventId: eventId,
+      attended: isAttending,
+    },
+    update: {
+      attended: isAttending,
+    },
+  });
+
+  revalidatePath('/users');
+  revalidatePath(`/events/${eventId}`);
+
+  return updatedAttendance.attended;
+}

@@ -1,9 +1,9 @@
-import UserItem from "@/components/pages/users/UserItem";
+import UserItem, { AttendEventButton } from "@/components/pages/users/UserItem";
 import { BackButton } from "@/components/utils/BackButton";
-import { getEventUsers } from "@/db/event";
+import { getEventUsersWithAttendance } from "@/db/event";
 
 export default async function Event({ params }: { params: { id: string } }) {
-  const users = await getEventUsers(params.id);
+  const users = await getEventUsersWithAttendance(params.id);
 
   return (
     <div className="flex flex-col w-full">
@@ -12,8 +12,21 @@ export default async function Event({ params }: { params: { id: string } }) {
       </div>
       <span className="text-lg font-medium mb-4">Signed Up</span>
       <div className="flex flex-col w-full gap-2">
-        {users.map((user) => {
-          return <UserItem key={user.id} user={user} />;
+        {users.sort((a, b) => a.firstName.localeCompare(b.firstName)).map((user, index) => {
+          return (
+            <UserItem
+              key={index}
+              user={user}
+              hideBadges={true}
+              actionButton={
+                <AttendEventButton
+                  username={user.username}
+                  attended={user.attended}
+                  eventId={params.id}
+                />
+              }
+            />
+          );
         })}
       </div>
     </div>

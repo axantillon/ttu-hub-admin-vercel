@@ -15,9 +15,9 @@ export default async function Users() {
             {users.map((user) => {
               return (
                 <UserItem
-                  key={user.id}
+                  key={user.username}
                   user={user}
-                  actionButton={<DeleteUserButton user={user} />}
+                  actionButton={<DeleteUserButton username={user.username} />}
                 />
               );
             })}

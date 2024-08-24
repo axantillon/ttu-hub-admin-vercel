@@ -115,24 +115,6 @@ export async function updateEvent(
   revalidatePath("/events");
 }
 
-export async function getEventUsers(id: string) {
-  const event = await prisma.event.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      attendees: {
-        include: {
-          user: true,
-        },
-      },
-    },
-  });
-
-  // Map the attendees to just return the user objects
-  return event?.attendees.map(attendance => attendance.user) || [];
-}
-
 export async function getEventUsersWithAttendance(id: string) {
   const event = await prisma.event.findUnique({
     where: {
@@ -150,7 +132,6 @@ export async function getEventUsersWithAttendance(id: string) {
   return (
     event?.attendees.map((attendance) => ({
       ...attendance.user,
-      signedUp: attendance.signedUp,
       attended: attendance.attended,
     })) || []
   );

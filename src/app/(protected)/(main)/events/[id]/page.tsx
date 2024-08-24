@@ -40,11 +40,11 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             <Badge
               className="w-fit"
               style={{
-              backgroundColor: EVENT_CATEGORIES.find(
-                (cat) => cat.name === event.category
-              )?.color,
-            }}
-          >
+                backgroundColor: EVENT_CATEGORIES.find(
+                  (cat) => cat.name === event.category
+                )?.color,
+              }}
+            >
               {event.category}
             </Badge>
           )}
@@ -64,12 +64,12 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
 
           <p>{event.description}</p>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mt-auto">
             <span className="-mb-2 text-sm text-gray-500">
               {event.users.length} signed up
             </span>
             <Link href={`/events/${event.id}/users`}>
-              <div className="w-fit p-2 hover:bg-black/25 rounded-xl">
+              <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
                 {event.users && event.users.length !== 0 && (
                   <AvatarCircles
                     numPeople={event.users.length}
@@ -78,6 +78,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
                       .map((user) => user.profilePic || "users/default.jpg")}
                   />
                 )}
+                View List
               </div>
             </Link>
           </div>
@@ -88,21 +89,21 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
               <DeleteEvent eventId={event.id} />
             </div>
             <div className="flex justify-start sm:justify-end w-full sm:w-auto">
-              <ShareLink
-                text={`https://ttucr-hub.app/event/${event.id}`}
-              />
+              <ShareLink text={`https://ttucr-hub.app/event/${event.id}`} />
             </div>
           </div>
         </div>
 
         <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
           <div className="relative w-full aspect-[330/176] bg-gray-200 rounded-xl overflow-clip">
-            {event.coverImg && <Image
-              src={event.coverImg}
-              fill
-              alt=""
-              className="aspect-auto object-cover"
-            />}
+            {event.coverImg && (
+              <Image
+                src={event.coverImg}
+                fill
+                alt=""
+                className="aspect-auto object-cover"
+              />
+            )}
           </div>
         </div>
       </div>
