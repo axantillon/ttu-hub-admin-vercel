@@ -33,7 +33,7 @@ model Org {
   orgPicture  String?
   officers    Json[]    @default([])
   category    String?
-  User        User[]
+  User        User[]    @relation("OrgToUser")
 }
 
 model User {
@@ -47,6 +47,6 @@ model User {
   updatedAt  DateTime?
   address    String?
   username   String    @unique
-  Org        Org[]
+  Org        Org[]     @relation("OrgToUser")
   Event      Event[]   @relation("UserToEvent")
 }
