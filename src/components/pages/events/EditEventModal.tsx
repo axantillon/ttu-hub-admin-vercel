@@ -50,7 +50,7 @@ const FormSchema = z.object({
   location: z.string({ required_error: "Location is required" }),
   organizer: z.string({ required_error: "Organizer is required" }).min(1),
   coverImg: z.any(),
-  category: z.string({ required_error: "Category is required" }),
+  category: z.string(),
 });
 
 export function EditEventModal({ event }: EditEventModalProps) {
@@ -71,6 +71,9 @@ export function EditEventModal({ event }: EditEventModalProps) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
+
+    data.category = data.category === "unassigned" ? "" : data.category;
+    
     let imgPath = event.coverImg;
     if (data.coverImg) {
       try {
@@ -187,6 +190,7 @@ export function EditEventModal({ event }: EditEventModalProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="unassigned">No Category</SelectItem>
                         {EVENT_CATEGORIES.map((category) => (
                           <SelectItem key={category.name} value={category.name}>
                             <span

@@ -74,6 +74,9 @@ const CreateEvent: FC = () => {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
+
+    data.category = data.category === "unassigned" ? "" : data.category;
+
     let imgPath: string | null = null;
     try {
       if (data.coverImg) {
@@ -183,6 +186,7 @@ const CreateEvent: FC = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                      <SelectItem value="unassigned">No Category</SelectItem>
                       {EVENT_CATEGORIES.map((category) => (
                         <SelectItem key={category.name} value={category.name}>
                           <span
