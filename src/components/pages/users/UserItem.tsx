@@ -25,28 +25,10 @@ import { Delete, Loader } from "react-feather";
 
 interface UserItemProps {
   user: User;
+  actionButton?: React.ReactNode;
 }
 
-const UserItem: FC<UserItemProps> = ({ user }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const { toast } = useToast();
-
-  const handleDelete = () => {
-    setIsDeleting(true);
-    deleteUserByUsername(user.username)
-      .then(() => {
-        setIsDeleting(false);
-      })
-      .catch(() => {
-        setIsDeleting(false);
-        toast({
-          variant: "destructive",
-          title: "Failed to delete user",
-          description: "An error occurred while deleting the user. Try again.",
-        });
-      });
-  };
-
+const UserItem: FC<UserItemProps> = ({ user, actionButton }) => {
   const major = getDegreeByKey(user.major) || {
     value: "",
     color: "",
@@ -100,41 +82,66 @@ const UserItem: FC<UserItemProps> = ({ user }) => {
         </div>
       </div>
 
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <div className="-mt-10 md:-mt-0 p-2 rounded-lg bg-red-500 text-white cursor-pointer self-end sm:self-auto">
-            {isDeleting ? (
-              <Loader size={16} className="animate-spin" />
-            ) : (
-              <Delete size={16} />
-            )}
-          </div>
-        </AlertDialogTrigger>
-
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you absolutely sure you want to delete <b>@{user.username}</b>
-              ?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete their
-              account and remove their data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-red-500 hover:bg-red-800"
-              onClick={handleDelete}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {actionButton}
     </div>
   );
 };
 
 export default UserItem;
+
+export const DeleteUserButton = ({ user }: { user: User }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { toast } = useToast();
+
+  const handleDelete = () => {
+    setIsDeleting(true);
+    deleteUserByUsername(user.username)
+      .then(() => {
+        setIsDeleting(false);
+      })
+      .catch(() => {
+        setIsDeleting(false);
+        toast({
+          variant: "destructive",
+          title: "Failed to delete user",
+          description: "An error occurred while deleting the user. Try again.",
+        });
+      });
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <div className="-mt-10 md:-mt-0 p-2 rounded-lg bg-red-500 text-white cursor-pointer self-end sm:self-auto">
+          {isDeleting ? (
+            <Loader size={16} className="animate-spin" />
+          ) : (
+            <Delete size={16} />
+          )}
+        </div>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you absolutely sure you want to delete <b>@{user.username}</b>?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete their
+            account and remove their data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-red-500 hover:bg-red-800"
+            onClick={handleDelete}
+          >
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+

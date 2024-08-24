@@ -1,4 +1,4 @@
-import UsersList from "@/components/pages/users/UsersList";
+import UserItem from "@/components/pages/users/UserItem";
 import { BackButton } from "@/components/utils/BackButton";
 import { getEventUsers } from "@/db/event";
 
@@ -11,7 +11,11 @@ export default async function Event({ params }: { params: { id: string } }) {
         <BackButton />
       </div>
       <span className="text-lg font-medium mb-4">Registered</span>
-      <UsersList users={users} />
+      <div className="flex flex-col w-full gap-2">
+        {users.map((user) => {
+          return <UserItem key={user.id} user={user} />;
+        })}
+      </div>
     </div>
   );
 }
