@@ -8,23 +8,8 @@ datasource db {
   directUrl = env("DATABASE_DIRECT_URL")
 }
 
-model User {
-  id         String    @id @default(cuid())
-  firstName  String
-  lastName   String
-  profilePic String?
-  major      String
-  minor      String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
-  address    String?
-  username   String    @unique
-  orgs       Org[]     @relation("OrgToUser")
-  events     Event[]   @relation("UserToEvent")
-}
-
 model Event {
-  id          String    @id @default(cuid())
+  id          String    @id
   name        String
   description String
   startTime   DateTime
@@ -32,21 +17,36 @@ model Event {
   organizer   String
   category    String?
   coverImg    String?
-  messages    String[] 
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  users       User[]    @relation("UserToEvent")
+  updatedAt   DateTime?
+  messages    String[]
+  User        User[]    @relation("UserToEvent")
 }
 
 model Org {
-  id          String    @id @default(cuid())
+  id          String    @id
   name        String
   description String?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
+  updatedAt   DateTime?
   color       String?
   orgPicture  String?
   officers    Json[]    @default([])
   category    String?
-  members     User[]    @relation("OrgToUser")
+  User        User[]
+}
+
+model User {
+  id         String    @id
+  firstName  String
+  lastName   String
+  profilePic String?
+  major      String
+  minor      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
+  address    String?
+  username   String    @unique
+  Org        Org[]
+  Event      Event[]   @relation("UserToEvent")
 }
