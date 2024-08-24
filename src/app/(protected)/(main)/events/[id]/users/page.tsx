@@ -10,7 +10,7 @@ export default async function Event({ params }: { params: { id: string } }) {
       <div className="z-50 relative -mt-[20px]">
         <BackButton />
       </div>
-      <span className="text-lg font-medium mb-4">Registered</span>
+      <span className="text-lg font-medium mb-4">Signed Up</span>
       <div className="flex flex-col w-full gap-2">
         {users.map((user) => {
           return <UserItem key={user.id} user={user} />;

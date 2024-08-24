@@ -18,11 +18,18 @@ export async function getAllEvents(pastEvents: boolean = false) {
           },
     },
     include: {
-      users: true,
+      attendees: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
-  return events;
+  return events.map(event => ({
+    ...event,
+    users: event.attendees.map(attendance => attendance.user),
+  }));
 }
 
 export async function getEventById(id: string) {
@@ -31,11 +38,22 @@ export async function getEventById(id: string) {
       id,
     },
     include: {
-      users: true,
+      attendees: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
-  return event;
+  if (event) {
+    return {
+      ...event,
+      users: event.attendees.map(attendance => attendance.user),
+    };
+  }
+
+  return null;
 }
 
 export async function createEvent(
@@ -103,11 +121,39 @@ export async function getEventUsers(id: string) {
       id,
     },
     include: {
-      users: true,
+      attendees: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
-  return event?.users || [];
+  // Map the attendees to just return the user objects
+  return event?.attendees.map(attendance => attendance.user) || [];
+}
+
+export async function getEventUsersWithAttendance(id: string) {
+  const event = await prisma.event.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      attendees: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
+  return (
+    event?.attendees.map((attendance) => ({
+      ...attendance.user,
+      signedUp: attendance.signedUp,
+      attended: attendance.attended,
+    })) || []
+  );
 }
 
 export async function addEventMessage(

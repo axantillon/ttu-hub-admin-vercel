@@ -1,15 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/shadcn/button";
-import { Prisma } from "@prisma/client";
-import { useState } from "react";
+import { Event, User } from "@prisma/client";
 import { Grid, List } from "react-feather";
-import { EventItem } from "./EventItem";
 import { useLocalStorage } from "usehooks-ts";
+import { EventItem } from "./EventItem";
 
-type EventWithUsers = Prisma.EventGetPayload<{
-  include: { users: true };
-}>;
+type EventWithUsers = Event & {
+  users: User[];
+};
 
 export default function EventList({ events }: { events: EventWithUsers[] }) {
   const [isGridView, setIsGridView] = useLocalStorage("isGridView", false);
@@ -25,7 +24,9 @@ export default function EventList({ events }: { events: EventWithUsers[] }) {
           variant="outline"
           size="icon"
           onClick={() => setIsGridView(!isGridView)}
-          aria-label={isGridView ? "Switch to list view" : "Switch to grid view"}
+          aria-label={
+            isGridView ? "Switch to list view" : "Switch to grid view"
+          }
         >
           {isGridView ? (
             <List className="h-4 w-4" />

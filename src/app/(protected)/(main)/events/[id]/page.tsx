@@ -66,7 +66,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
 
           <div className="flex flex-col gap-2">
             <span className="-mb-2 text-sm text-gray-500">
-              {event.users.length} Registered
+              {event.users.length} signed up
             </span>
             <Link href={`/events/${event.id}/users`}>
               <div className="w-fit p-2 hover:bg-black/25 rounded-xl">
