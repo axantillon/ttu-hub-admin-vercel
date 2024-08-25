@@ -56,12 +56,12 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
           <span className="font-semibold">{`${user.firstName} ${user.lastName}`}</span>
 
           {!hideBadges && <div className="flex flex-wrap gap-1 w-[200px] sm:w-auto">
-            <div className="w-fit flex items-center px-2 rounded-full bg-black/10">
+            <div className="flex items-center h-6 px-2 rounded-full bg-black/10">
               <span className="text-xs leading-none">@{user.username}</span>
             </div>
 
             <div
-              className="h-fit w-fit px-2 rounded-full"
+              className="flex items-center h-6 px-2 rounded-full"
               style={{ backgroundColor: major.color }}
             >
               <span className="text-xs leading-none text-white">
@@ -71,7 +71,7 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
 
             {minor && minor.value !== "NONE" && (
               <div
-                className="w-fit h-fit px-2 rounded-full bg-black/10"
+                className="flex items-center h-6 px-2 rounded-full"
                 style={{ backgroundColor: minor.color }}
               >
                 <span className="text-xs leading-none text-white">
@@ -80,7 +80,7 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
               </div>
             )}
 
-            <div className="w-fit flex items-center px-2 rounded-full bg-purple-500">
+            <div className="flex items-center h-6 px-2 rounded-full bg-purple-500">
               <span className="text-xs leading-none text-white">
                 {user.points} pts
               </span>
