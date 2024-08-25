@@ -64,6 +64,7 @@ export async function createEvent(
     location: string;
     organizer: string;
     coverImg: string | null;
+    category: string;
   },
   sendAsEmail: boolean,
   sender: string
