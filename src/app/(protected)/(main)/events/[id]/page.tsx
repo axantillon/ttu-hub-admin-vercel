@@ -36,18 +36,23 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
         <div className="flex flex-col w-full md:w-1/2 gap-2">
           <span className="text-xl md:text-2xl font-bold">{event.name}</span>
 
-          {event.category && (
-            <Badge
-              className="w-fit"
-              style={{
-                backgroundColor: EVENT_CATEGORIES.find(
-                  (cat) => cat.name === event.category
-                )?.color,
-              }}
-            >
-              {event.category}
+          <div className="flex items-center gap-3">
+            {event.category && (
+              <Badge
+                className="text-center whitespace-nowrap max-w-[120px]"
+                style={{
+                  backgroundColor: EVENT_CATEGORIES.find(
+                    (cat) => cat.name === event.category
+                  )?.color,
+                }}
+              >
+                <span className="whitespace-nowrap">{event.category}</span>
+              </Badge>
+            )}
+            <Badge className="text-xs font-normal bg-purple-500 hover:bg-purple-500">
+              {event.reward} pts
             </Badge>
-          )}
+          </div>
 
           <div className="flex flex-col md:flex-row gap-2">
             <span className="text-sm text-gray-500">
@@ -71,14 +76,16 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             <Link href={`/events/${event.id}/users`}>
               <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
                 {event.users && event.users.length !== 0 && (
-                  <AvatarCircles
-                    numPeople={event.users.length}
-                    avatarUrls={event.users
-                      .slice(0, 3)
-                      .map((user) => user.profilePic || "users/default.jpg")}
-                  />
+                  <>
+                    <AvatarCircles
+                      numPeople={event.users.length}
+                      avatarUrls={event.users
+                        .slice(0, 3)
+                        .map((user) => user.profilePic || "users/default.jpg")}
+                    />
+                    <span className="text-sm font-medium">View List</span>
+                  </>
                 )}
-                View List
               </div>
             </Link>
           </div>

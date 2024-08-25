@@ -17,35 +17,45 @@ interface EventItemProps {
 export const EventItem: FC<EventItemProps> = ({ event }) => {
   return (
     <Link prefetch={true} href={`/events/${event.id}`}>
-      <div className="flex flex-col gap-y-1 w-[330px] h-[290px] rounded-2xl shadow-sm shadow-gray-300 bg-white ">
-        <div className="relative flex items-end justify-between w-full h-44 p-3 rounded-2xl shadow-md shadow-gray-400 bg-gray-200 overflow-clip">
-          {event.coverImg && <Image
-            src={event.coverImg}
-            fill
-            alt=""
-            className="absolute top-0 left-0 aspect-auto object-cover"
-          />}
-          {event.category && (
-            <Badge
-              className="z-10"
-              style={{
-              backgroundColor: EVENT_CATEGORIES.find(
-                  (cat) => cat.name === event.category
-                )?.color,
-              }}
-            >
-              {event.category}
-            </Badge>
+      <div className="flex flex-col gap-y-1 h-[315px] aspect-[340/315] rounded-2xl shadow-sm shadow-gray-300 bg-white ">
+        <div className="relative flex items-end justify-between w-full h-[208px] aspect-[340/208] p-3 rounded-2xl shadow-md shadow-gray-400 bg-gray-200 overflow-clip">
+          {event.coverImg && (
+            <Image
+              src={event.coverImg}
+              fill
+              alt=""
+              className="absolute top-0 left-0 aspect-auto object-cover"
+            />
           )}
-          {event.users && event.users.length !== 0 && (
+          {event.users && event.users.length !== 0 ? (
             <AvatarCircles
               className="-space-x-6 *:bg-white *:text-black *:shadow-lg "
               numPeople={event.users.length}
               avatarUrls={event.users
                 .slice(0, 3)
-                .map((user) => user.profilePic || "users/default.jpg")}
+                .map((user) => user.profilePic || "")}
             />
+          ) : (
+            <div />
           )}
+
+          <div className="flex flex-col items-end z-10 gap-y-1">
+            <Badge className="text-xs font-normal bg-purple-500 hover:bg-purple-500">
+              {event.reward} pts
+            </Badge>
+            {event.category && (
+              <Badge
+                className="text-center whitespace-nowrap max-w-[120px]"
+                style={{
+                  backgroundColor: EVENT_CATEGORIES.find(
+                    (cat) => cat.name === event.category
+                  )?.color,
+                }}
+              >
+                <span className="whitespace-nowrap">{event.category}</span>
+              </Badge>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-1 flex-row items-center w-full">
