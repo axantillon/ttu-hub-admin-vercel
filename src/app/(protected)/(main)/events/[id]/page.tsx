@@ -50,48 +50,56 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
                 <span className="whitespace-nowrap">{event.category}</span>
               </Badge>
             )}
-            <Badge className="text-xs font-normal bg-purple-500 hover:bg-purple-500">
-              {event.reward} pts
-            </Badge>
+            {event.reward > 0 && (
+              <Badge className="text-xs font-normal bg-purple-500 hover:bg-purple-500">
+                {event.reward} pts
+              </Badge>
+            )}
           </div>
 
           <div className="flex flex-col md:flex-row gap-2">
             <span className="text-sm text-gray-500">
               {formatInTimeZone(
                 event.startTime,
-                "America/New_York",
+                "America/Costa_Rica",
                 "EEEE, MMMM d, yyyy"
               )}
             </span>
             <span className="text-sm text-gray-500">
-              {formatInTimeZone(event.startTime, "America/New_York", "h:mm a")}
+              {formatInTimeZone(event.startTime, "America/Costa_Rica", "h:mm a")}
+              {event.endTime &&
+                ` - ${formatInTimeZone(event.endTime, "America/Costa_Rica", "h:mm a")}`}
             </span>
           </div>
 
           <p>{event.description}</p>
 
           <div className="flex flex-col gap-2 mt-auto">
-            <span className="-mb-2 text-sm text-gray-500">
-              {event.users.length} signed up
-            </span>
-            <div className="flex items-center gap-2">
-              <Link href={`/events/${event.id}/users`} className="w-fit">
-                <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
-                  {event.users && event.users.length !== 0 && (
-                    <>
-                      <AvatarCircles
-                        numPeople={event.users.length}
-                        avatarUrls={event.users
-                          .slice(0, 3)
-                          .map(
-                            (user) => user.profilePic || "users/default.jpg"
-                          )}
-                      />
-                      <span className="text-sm font-medium">View List</span>
-                    </>
-                  )}
-                </div>
-              </Link>
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <span>{event.users.length} signed up</span>
+              {event.userLimit && (
+                <>
+                  <span>•</span>
+                  <span>{event.userLimit} max</span>
+                </>
+              )}
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              {event.users && event.users.length !== 0 && (
+                <Link href={`/events/${event.id}/users`} className="w-fit">
+                  <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
+                    <AvatarCircles
+                      numPeople={event.users.length}
+                      avatarUrls={event.users
+                        .slice(0, 3)
+                        .map(
+                          (user) => user.profilePic || "users/default.jpg"
+                        )}
+                    />
+                    <span className="text-sm font-medium">View List</span>
+                  </div>
+                </Link>
+              )}
               <CloseEvent
                 eventId={event.id}
                 initialClosedState={event.closed}
