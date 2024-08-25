@@ -278,3 +278,29 @@ export async function deleteEvent(id: string) {
     throw new Error("Failed to delete event");
   }
 }
+
+export async function toggleEventClosed(id: string) {
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id },
+      select: { closed: true }
+    });
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    const updatedEvent = await prisma.event.update({
+      where: { id },
+      data: { closed: !event.closed },
+    });
+
+    revalidatePath(`/events/${id}`);
+    revalidatePath("/events");
+
+    return updatedEvent;
+  } catch (error) {
+    console.error("Error toggling event closed status:", error);
+    throw new Error("Failed to toggle event closed status");
+  }
+}

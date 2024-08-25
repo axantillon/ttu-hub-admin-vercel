@@ -1,3 +1,4 @@
+import CloseEvent from "@/components/pages/events/CloseEvent";
 import DeleteEvent from "@/components/pages/events/DeleteEvent";
 import { EditEventModal } from "@/components/pages/events/EditEventModal";
 import { EventMessage } from "@/components/pages/events/EventMessage";
@@ -73,21 +74,29 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
             <span className="-mb-2 text-sm text-gray-500">
               {event.users.length} signed up
             </span>
-            <Link href={`/events/${event.id}/users`}>
-              <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
-                {event.users && event.users.length !== 0 && (
-                  <>
-                    <AvatarCircles
-                      numPeople={event.users.length}
-                      avatarUrls={event.users
-                        .slice(0, 3)
-                        .map((user) => user.profilePic || "users/default.jpg")}
-                    />
-                    <span className="text-sm font-medium">View List</span>
-                  </>
-                )}
-              </div>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link href={`/events/${event.id}/users`} className="w-fit">
+                <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
+                  {event.users && event.users.length !== 0 && (
+                    <>
+                      <AvatarCircles
+                        numPeople={event.users.length}
+                        avatarUrls={event.users
+                          .slice(0, 3)
+                          .map(
+                            (user) => user.profilePic || "users/default.jpg"
+                          )}
+                      />
+                      <span className="text-sm font-medium">View List</span>
+                    </>
+                  )}
+                </div>
+              </Link>
+              <CloseEvent
+                eventId={event.id}
+                initialClosedState={event.closed}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row w-full justify-between mt-4 md:mt-auto gap-4 sm:gap-2">
