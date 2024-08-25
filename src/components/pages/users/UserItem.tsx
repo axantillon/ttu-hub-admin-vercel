@@ -21,7 +21,7 @@ import { getDegreeByKey } from "@/lib/utils";
 import { cn } from "@/lib/utils/cn";
 import { User } from "@prisma/client";
 import { FC, useState } from "react";
-import { Check, Delete, Loader, X } from "react-feather";
+import { Check, Loader, X } from "react-feather";
 
 interface UserItemProps {
   user: User;
@@ -29,7 +29,11 @@ interface UserItemProps {
   hideBadges?: boolean;
 }
 
-const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false }) => {
+const UserItem: FC<UserItemProps> = ({
+  user,
+  actionButton,
+  hideBadges = false,
+}) => {
   const major = getDegreeByKey(user.major) || {
     value: "",
     color: "",
@@ -44,7 +48,9 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
       )}
       style={{ borderColor: major.color }}
     >
-      <div className={cn("flex items-center gap-2", !hideBadges && "mb-2 sm:mb-0")}>
+      <div
+        className={cn("flex items-center gap-2", !hideBadges && "mb-2 sm:mb-0")}
+      >
         <Avatar className="w-10 h-10 flex-shrink-0">
           <AvatarImage src={user.profilePic!} alt={user.username} />
           <AvatarFallback className="bg-black/10">
@@ -52,40 +58,44 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
-          <span className="font-semibold">{`${user.firstName} ${user.lastName}`}</span>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+          <span className="font-semibold truncate max-w-[200px] sm:max-w-none">
+            {`${user.firstName} ${user.lastName}`}
+          </span>
 
-          {!hideBadges && <div className="flex flex-wrap gap-1 w-[200px] sm:w-auto">
-            <div className="flex items-center h-6 px-2 rounded-full bg-black/10">
-              <span className="text-xs leading-none">@{user.username}</span>
-            </div>
+          {!hideBadges && (
+            <div className="flex flex-wrap gap-1 w-[200px] sm:w-auto">
+              <div className="flex items-center h-6 px-2 rounded-full bg-black/10">
+                <span className="text-xs leading-none">@{user.username}</span>
+              </div>
 
-            <div
-              className="flex items-center h-6 px-2 rounded-full"
-              style={{ backgroundColor: major.color }}
-            >
-              <span className="text-xs leading-none text-white">
-                {major.value}
-              </span>
-            </div>
-
-            {minor && minor.value !== "NONE" && (
               <div
                 className="flex items-center h-6 px-2 rounded-full"
-                style={{ backgroundColor: minor.color }}
+                style={{ backgroundColor: major.color }}
               >
                 <span className="text-xs leading-none text-white">
-                  {minor.value}
+                  {major.value}
                 </span>
               </div>
-            )}
 
-            <div className="flex items-center h-6 px-2 rounded-full bg-purple-500">
-              <span className="text-xs leading-none text-white">
-                {user.points} pts
-              </span>
+              {minor && minor.value !== "NONE" && (
+                <div
+                  className="flex items-center h-6 px-2 rounded-full"
+                  style={{ backgroundColor: minor.color }}
+                >
+                  <span className="text-xs leading-none text-white">
+                    {minor.value}
+                  </span>
+                </div>
+              )}
+
+              <div className="flex items-center h-6 px-2 rounded-full bg-purple-500">
+                <span className="text-xs leading-none text-white">
+                  {user.points} pts
+                </span>
+              </div>
             </div>
-          </div>}
+          )}
         </div>
       </div>
 
@@ -123,7 +133,7 @@ export const DeleteUserButton = ({ username }: { username: string }) => {
           {isDeleting ? (
             <Loader size={16} className="animate-spin" />
           ) : (
-            <Delete size={16} />
+            <X size={16} />
           )}
         </button>
       </AlertDialogTrigger>
