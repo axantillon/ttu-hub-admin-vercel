@@ -90,12 +90,8 @@ export const EditEventModal: FC<EditEventModalProps> = ({ event }) => {
         <div className="h-[calc(90vh-12rem)] sm:h-[calc(100vh-16rem)] overflow-y-auto px-2">
           <EventForm
             defaultValues={{
-              name: event.name,
-              description: event.description,
-              startTime: event.startTime,
-              location: event.location,
-              organizer: event.organizer,
-              category: event.category || "",
+              ...event,
+              coverImg: undefined
             }}
             onSubmit={onSubmit}
             loading={loading}

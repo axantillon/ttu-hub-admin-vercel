@@ -14,14 +14,12 @@ import { Control } from "react-hook-form";
 
 interface DateTimeRangePickerProps {
   control: Control<any>;
-  startDateName: string;
   startTimeName: string;
   endTimeName: string;
 }
 
 const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   control,
-  startDateName,
   startTimeName,
   endTimeName,
 }) => {
@@ -29,94 +27,93 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col">
-        <FormField
-          control={control}
-          name={startDateName}
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel className="block mb-2">Date</FormLabel>
-              <FormControl>
+      <FormField
+        control={control}
+        name={startTimeName}
+        render={({ field }) => (
+          <FormItem className="w-full">
+            <FormLabel className="block mb-2">Start Date and Time</FormLabel>
+            <div className="flex space-x-4">
+              <FormControl className="flex-1">
                 <ReactDatePicker
                   selected={field.value}
-                  onChange={(date: Date | null) => field.onChange(date)}
+                  onChange={(date: Date | null) => {
+                    if (date) {
+                      const newDate = new Date(field.value);
+                      newDate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+                      field.onChange(newDate);
+                    }
+                  }}
                   dateFormat="MMMM d, yyyy"
                   className={datePickerClassName}
                 />
               </FormControl>
+              <FormControl className="flex-1">
+                <ReactDatePicker
+                  selected={field.value}
+                  onChange={(date: Date | null) => {
+                    if (date) {
+                      const newDate = new Date(field.value);
+                      newDate.setHours(date.getHours(), date.getMinutes());
+                      field.onChange(newDate);
+                    }
+                  }}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Time"
+                  dateFormat="h:mm aa"
+                  className={datePickerClassName}
+                />
+              </FormControl>
+            </div>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name={endTimeName}
+        render={({ field }) => {
+          const startTime = control._getWatch(startTimeName);
+          return (
+            <FormItem>
+              <FormLabel className="block mb-2">End Time (Optional)</FormLabel>
+              <FormControl>
+                <ReactDatePicker
+                  selected={field.value}
+                  onChange={(date: Date | null) => {
+                    if (date) {
+                      const endTime = new Date(startTime);
+                      endTime.setHours(date.getHours(), date.getMinutes(), 0, 0);
+                      field.onChange(endTime);
+                    } else {
+                      field.onChange(null);
+                    }
+                  }}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Time"
+                  dateFormat="h:mm aa"
+                  className={datePickerClassName}
+                  minTime={new Date(startTime.getTime())}
+                  maxTime={new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), 23, 59, 59, 999)}
+                  filterTime={(time) => {
+                    const selectedTime = new Date(startTime);
+                    selectedTime.setHours(time.getHours(), time.getMinutes(), 0, 0);
+                    return selectedTime.getTime() > startTime.getTime();
+                  }}
+                  isClearable
+                  placeholderText="Select end time"
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
-          )}
-        />
-      </div>
-
-      <div className="flex space-x-4">
-        <div className="flex flex-col flex-1">
-          <FormField
-            control={control}
-            name={startTimeName}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="block mb-2">Start Time</FormLabel>
-                <FormControl>
-                  <ReactDatePicker
-                    selected={field.value}
-                    onChange={(date: Date | null) => date && field.onChange(date)}
-                    showTimeSelect
-                    showTimeSelectOnly
-                    timeIntervals={15}
-                    timeCaption="Time"
-                    dateFormat="h:mm aa"
-                    className={datePickerClassName}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex flex-col flex-1">
-          <FormField
-            control={control}
-            name={endTimeName}
-            render={({ field }) => {
-              const startTime = control._getWatch(startTimeName);
-              return (
-                <FormItem>
-                  <FormLabel className="block mb-2">End Time (Optional)</FormLabel>
-                  <FormControl>
-                    <ReactDatePicker
-                      selected={field.value}
-                      onChange={(date: Date | null) => field.onChange(date)}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="h:mm aa"
-                      className={datePickerClassName}
-                      minTime={new Date(0, 0, 0, startTime.getHours(), startTime.getMinutes())}
-                      maxTime={new Date(0, 0, 0, 23, 59)}
-                      filterTime={(time) => {
-                        const selectedTime = new Date(time);
-                        const startTimeDate = new Date(startTime);
-                        return (
-                          selectedTime.getTime() > startTimeDate.getTime() ||
-                          (selectedTime.getHours() === startTimeDate.getHours() &&
-                            selectedTime.getMinutes() > startTimeDate.getMinutes())
-                        );
-                      }}
-                      isClearable
-                      placeholderText="Select end time"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </div>
-      </div>
+          );
+        }}
+      />
     </div>
   );
 };

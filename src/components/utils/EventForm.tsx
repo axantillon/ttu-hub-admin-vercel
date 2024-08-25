@@ -32,7 +32,6 @@ import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 export const FormSchema = z.object({
   name: z.string({ required_error: "Name is required" }).min(1),
   description: z.string({ required_error: "Description is required" }),
-  startDate: z.date({ required_error: "Start date is required" }),
   startTime: z.date({ required_error: "Start time is required" }),
   endTime: z.date().nullable(),
   location: z.string({ required_error: "Location is required" }),
@@ -60,43 +59,23 @@ const EventForm: FC<EventFormProps> = ({
 }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: "",
       description: "",
-      startDate: new Date(),
       startTime: new Date(),
       endTime: null,
       location: "",
       organizer: "",
+      coverImg: undefined,
       category: "",
       userLimit: null,
       reward: 0,
-      ...defaultValues,
     },
   });
 
   const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const combinedStartTime = new Date(data.startDate);
-    combinedStartTime.setHours(
-      data.startTime.getHours(),
-      data.startTime.getMinutes()
-    );
 
-    const submissionData = {
-      ...data,
-      startTime: combinedStartTime,
-      endTime: data.endTime
-        ? new Date(
-            data.startDate.getFullYear(),
-            data.startDate.getMonth(),
-            data.startDate.getDate(),
-            data.endTime.getHours(),
-            data.endTime.getMinutes()
-          )
-        : null,
-    };
-
-    await onSubmit(submissionData);
+    onSubmit(data);
     if (onSuccessfulSubmit) {
       onSuccessfulSubmit();
     }
@@ -123,7 +102,6 @@ const EventForm: FC<EventFormProps> = ({
 
         <DateTimeRangePicker
           control={form.control}
-          startDateName="startDate"
           startTimeName="startTime"
           endTimeName="endTime"
         />
