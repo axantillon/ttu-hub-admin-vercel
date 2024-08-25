@@ -5,6 +5,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { FormNumberInput } from "@/components/utils/formInputs/FormNumberInput";
 import DateTimeRangePicker from "@/components/utils/formInputs/DateTimeRangePicker";
 import { Button } from "@/components/ui/shadcn/button";
 import {
@@ -38,6 +39,8 @@ export const FormSchema = z.object({
   organizer: z.string({ required_error: "Organizer is required" }).min(1),
   coverImg: z.any(),
   category: z.string(),
+  userLimit: z.number().nullable().optional(),
+  reward: z.number().min(0, "Reward must be a non-negative number").default(0),
 });
 
 interface EventFormProps {
@@ -66,6 +69,8 @@ const EventForm: FC<EventFormProps> = ({
       location: "",
       organizer: "",
       category: "",
+      userLimit: null,
+      reward: 0,
       ...defaultValues,
     },
   });
@@ -186,6 +191,20 @@ const EventForm: FC<EventFormProps> = ({
               </FormControl>
             </FormItem>
           )}
+        />
+
+        <FormNumberInput
+          control={form.control}
+          name="userLimit"
+          label="User Limit (Optional)"
+          placeholder="Enter max number of attendees"
+        />
+
+        <FormNumberInput
+          control={form.control}
+          name="reward"
+          label="Reward Points (Optional)"
+          placeholder="Enter reward for attendance"
         />
 
         <Button disabled={loading} type="submit" className="w-full sm:w-auto">
