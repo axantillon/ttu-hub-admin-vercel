@@ -12,15 +12,18 @@ export default async function Users() {
       <div className="relative flex flex-col-reverse md:flex-row w-full h-full gap-4 overflow-auto">
         <div className="w-full md:w-2/3">
           <div className="flex flex-col w-full gap-2">
-            {users.map((user) => {
-              return (
-                <UserItem
-                  key={user.username}
-                  user={user}
-                  actionButton={<DeleteUserButton username={user.username} />}
-                />
-              );
-            })}
+            {users
+              .sort((a, b) => a.firstName.localeCompare(b.firstName))
+              .sort((a, b) => b.points - a.points)
+              .map((user) => {
+                return (
+                  <UserItem
+                    key={user.username}
+                    user={user}
+                    actionButton={<DeleteUserButton username={user.username} />}
+                  />
+                );
+              })}
           </div>
         </div>
 
