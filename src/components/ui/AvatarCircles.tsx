@@ -19,14 +19,18 @@ const AvatarCircles = ({
   return (
     <div className={cn("z-10 flex -space-x-4 rtl:space-x-reverse", className)}>
       {avatarUrls.map((url, index) => (
-        <Image
+        <div
           key={index}
-          className="h-10 w-10 rounded-full border-2 border-gray-300 bg-white "
-          src={url || "general/default.jpg"}
-          width={40}
-          height={40}
-          alt=""
-        />
+          className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-gray-300 bg-white"
+        >
+          <Image
+            className="object-cover"
+            src={url || "/general/default.jpg"}
+            fill
+            sizes="40px"
+            alt={`Avatar ${index + 1}`}
+          />
+        </div>
       ))}
       {displayNum > 0 && (
         <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-black text-center text-xs font-medium text-white dark:border-gray-800 dark:bg-white dark:text-black">

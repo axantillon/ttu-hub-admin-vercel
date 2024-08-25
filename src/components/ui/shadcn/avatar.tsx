@@ -26,10 +26,11 @@ const AvatarImage = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <Image
     ref={ref}
-    className={cn("aspect-square h-full w-full", className)}
-    src={props.src || "users/default.jpg"}
+    className={cn("aspect-square h-full w-full object-cover", className)}
+    src={props.src || "/users/default.jpg"}
     fill
-    alt=""
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    alt={props.alt || "Avatar"}
   />
 ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
