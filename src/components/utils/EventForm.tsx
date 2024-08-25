@@ -5,8 +5,8 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import DateTimeRangePicker from "@/components/utils/formInputs/DateTimeRangePicker";
 import { Button } from "@/components/ui/shadcn/button";
-import { DateTimePicker } from "@/components/ui/shadcn/DateTimePicker";
 import {
   Form,
   FormControl,
@@ -31,7 +31,9 @@ import { EVENT_CATEGORIES } from "@/lib/utils/consts";
 export const FormSchema = z.object({
   name: z.string({ required_error: "Name is required" }).min(1),
   description: z.string({ required_error: "Description is required" }),
+  startDate: z.date({ required_error: "Start date is required" }),
   startTime: z.date({ required_error: "Start time is required" }),
+  endTime: z.date().nullable(),
   location: z.string({ required_error: "Location is required" }),
   organizer: z.string({ required_error: "Organizer is required" }).min(1),
   coverImg: z.any(),
@@ -58,7 +60,9 @@ const EventForm: FC<EventFormProps> = ({
     defaultValues: {
       name: "",
       description: "",
+      startDate: new Date(),
       startTime: new Date(),
+      endTime: null,
       location: "",
       organizer: "",
       category: "",
@@ -67,7 +71,27 @@ const EventForm: FC<EventFormProps> = ({
   });
 
   const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
-    await onSubmit(data);
+    const combinedStartTime = new Date(data.startDate);
+    combinedStartTime.setHours(
+      data.startTime.getHours(),
+      data.startTime.getMinutes()
+    );
+
+    const submissionData = {
+      ...data,
+      startTime: combinedStartTime,
+      endTime: data.endTime
+        ? new Date(
+            data.startDate.getFullYear(),
+            data.startDate.getMonth(),
+            data.startDate.getDate(),
+            data.endTime.getHours(),
+            data.endTime.getMinutes()
+          )
+        : null,
+    };
+
+    await onSubmit(submissionData);
     if (onSuccessfulSubmit) {
       onSuccessfulSubmit();
     }
@@ -92,32 +116,19 @@ const EventForm: FC<EventFormProps> = ({
           placeholder="description..."
         />
 
-        <div className="flex flex-col gap-4">
-          <FormField
-            control={form.control}
-            name="startTime"
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-2">
-                <FormLabel>Start Time</FormLabel>
-                <FormControl>
-                  <DateTimePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    hourCycle={12}
-                    placeholder="Select a date and time"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormTextInput
-            control={form.control}
-            name="location"
-            label="Location"
-            placeholder="eg. Gathering Stairs"
-          />
-        </div>
+        <DateTimeRangePicker
+          control={form.control}
+          startDateName="startDate"
+          startTimeName="startTime"
+          endTimeName="endTime"
+        />
+
+        <FormTextInput
+          control={form.control}
+          name="location"
+          label="Location"
+          placeholder="eg. Gathering Stairs"
+        />
 
         <FormField
           control={form.control}

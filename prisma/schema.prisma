@@ -28,6 +28,7 @@ model Event {
   name        String
   description String
   startTime   DateTime
+  endTime     DateTime?
   location    String
   organizer   String
   category    String?
@@ -37,6 +38,8 @@ model Event {
   messages    String[]
   reward      Int               @default(0)
   attendees   EventAttendance[]
+  userLimit   Int?
+  closed      Boolean           @default(false)
 }
 
 model EventAttendance {
