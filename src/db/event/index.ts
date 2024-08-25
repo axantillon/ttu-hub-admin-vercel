@@ -115,7 +115,7 @@ export async function updateEvent(
   revalidatePath("/events");
 }
 
-export async function getEventUsersWithAttendance(id: string) {
+export async function getEventRewardAndUsersWithAttendance(id: string) {
   const event = await prisma.event.findUnique({
     where: {
       id,
@@ -129,12 +129,13 @@ export async function getEventUsersWithAttendance(id: string) {
     },
   });
 
-  return (
-    event?.attendees.map((attendance) => ({
+  return {
+    users: event?.attendees.map((attendance) => ({
       ...attendance.user,
       attended: attendance.attended,
-    })) || []
-  );
+    })) || [],
+    reward: event?.reward || 0,
+  };
 }
 
 export async function addEventMessage(

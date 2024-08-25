@@ -52,16 +52,16 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+        <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
           <span className="font-semibold">{`${user.firstName} ${user.lastName}`}</span>
 
-          {!hideBadges && <div className="flex flex-wrap gap-1 w-[200px] md:w-auto">
-            <div className="w-min px-2 pb-0.5 rounded-full bg-black/10">
+          {!hideBadges && <div className="flex flex-wrap gap-1 w-[200px] sm:w-auto">
+            <div className="w-fit flex items-center px-2 rounded-full bg-black/10">
               <span className="text-xs leading-none">@{user.username}</span>
             </div>
 
             <div
-              className="w-min px-2 pb-0.5 rounded-full bg-black/10"
+              className="h-fit w-fit px-2 rounded-full"
               style={{ backgroundColor: major.color }}
             >
               <span className="text-xs leading-none text-white">
@@ -71,7 +71,7 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
 
             {minor && minor.value !== "NONE" && (
               <div
-                className="w-min px-2 pb-0.5 rounded-full bg-black/10"
+                className="w-fit h-fit px-2 rounded-full bg-black/10"
                 style={{ backgroundColor: minor.color }}
               >
                 <span className="text-xs leading-none text-white">
@@ -79,6 +79,12 @@ const UserItem: FC<UserItemProps> = ({ user, actionButton, hideBadges = false })
                 </span>
               </div>
             )}
+
+            <div className="w-fit flex items-center px-2 rounded-full bg-purple-500">
+              <span className="text-xs leading-none text-white">
+                {user.points} pts
+              </span>
+            </div>
           </div>}
         </div>
       </div>
@@ -150,10 +156,12 @@ export const AttendEventButton = ({
   username,
   attended,
   eventId,
+  reward,
 }: {
   username: string;
   attended: boolean;
   eventId: string;
+  reward: number;
 }) => {
   const [isAttending, setIsAttending] = useState(attended);
   const { toast } = useToast();
@@ -162,7 +170,7 @@ export const AttendEventButton = ({
     // Optimistically update the UI
     setIsAttending(!isAttending);
 
-    toggleUserAttendEvent(username, eventId, !isAttending).catch(() => {
+    toggleUserAttendEvent(username, eventId, !isAttending, reward).catch(() => {
       // Revert the optimistic update on error
       setIsAttending(isAttending);
       toast({

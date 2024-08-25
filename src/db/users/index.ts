@@ -57,7 +57,7 @@ export async function deleteUserByUsername(username: string) {
   return user;
 }
 
-export async function toggleUserAttendEvent(username: string, eventId: string, isAttending: boolean) {
+export async function toggleUserAttendEvent(username: string, eventId: string, isAttending: boolean, reward: number) {
   const updatedAttendance = await prisma.eventAttendance.upsert({
     where: {
       username_eventId: {
@@ -74,6 +74,27 @@ export async function toggleUserAttendEvent(username: string, eventId: string, i
       attended: isAttending,
     },
   });
+
+  // Update user's points based on attendance
+  if (isAttending) {
+    await prisma.user.update({
+      where: { username },
+      data: {
+        points: {
+          increment: reward,
+        },
+      },
+    });
+  } else {
+    await prisma.user.update({
+      where: { username },
+      data: {
+        points: {
+          decrement: reward,
+        },
+      },
+    });
+  }
 
   revalidatePath('/users');
   revalidatePath(`/events/${eventId}`);
