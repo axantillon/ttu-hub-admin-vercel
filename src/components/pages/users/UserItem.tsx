@@ -27,12 +27,14 @@ interface UserItemProps {
   user: User;
   actionButton?: React.ReactNode;
   hideBadges?: boolean;
+  signUpDate?: Date;
 }
 
 const UserItem: FC<UserItemProps> = ({
   user,
   actionButton,
   hideBadges = false,
+  signUpDate,
 }) => {
   const major = getDegreeByKey(user.major) || {
     value: "",
@@ -44,7 +46,7 @@ const UserItem: FC<UserItemProps> = ({
   return (
     <div
       className={cn(
-        `flex flex-col sm:flex-row items-start sm:items-center justify-between w-full p-3 sm:p-2 border-2 rounded-xl`
+        `flex items-start sm:items-center justify-between w-full p-3 sm:p-2 border-2 rounded-xl`
       )}
       style={{ borderColor: major.color }}
     >
@@ -63,7 +65,7 @@ const UserItem: FC<UserItemProps> = ({
             {`${user.firstName} ${user.lastName}`}
           </span>
 
-          {!hideBadges && (
+          {!hideBadges ? (
             <div className="flex flex-wrap gap-1 w-[200px] sm:w-auto">
               <div className="flex items-center h-6 px-2 rounded-full bg-black/10">
                 <span className="text-xs leading-none">@{user.username}</span>
@@ -94,6 +96,12 @@ const UserItem: FC<UserItemProps> = ({
                   {user.points} pts
                 </span>
               </div>
+            </div>
+          ) : (
+            <div className="flex items-center h-6 px-2 rounded-full bg-purple-500">
+              <span className="text-xs leading-none text-white">
+                {signUpDate?.toLocaleString()}
+              </span>
             </div>
           )}
         </div>
@@ -182,7 +190,7 @@ export const AttendEventButton = ({
 
     toggleUserAttendEvent(username, eventId, !isAttending, reward).catch(() => {
       // Revert the optimistic update on error
-      setIsAttending(isAttending);
+      setIsAttending(attended);
       toast({
         variant: "destructive",
         title: `Failed to update attendance for ${username}`,
@@ -195,7 +203,7 @@ export const AttendEventButton = ({
     <button
       onClick={handleAttend}
       className={cn(
-        "flex items-center justify-center -mt-10 md:-mt-0 p-2 rounded-lg text-white cursor-pointer self-end sm:self-auto transition-colors duration-200",
+        "flex items-center justify-center h-full p-2 rounded-lg text-white cursor-pointer sm:self-auto transition-colors duration-200",
         isAttending
           ? "bg-red-500 hover:bg-red-600"
           : "bg-green-500 hover:bg-green-600"

@@ -133,6 +133,7 @@ export async function getEventRewardAndUsersWithAttendance(id: string) {
     users: event?.attendees.map((attendance) => ({
       ...attendance.user,
       attended: attendance.attended,
+      signUpDate: attendance.signedUp, // Include the signup date
     })) || [],
     reward: event?.reward || 0,
   };

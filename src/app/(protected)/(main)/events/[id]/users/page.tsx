@@ -22,6 +22,7 @@ export default async function Event({ params }: { params: { id: string } }) {
                 key={index}
                 user={user}
                 hideBadges={true}
+                signUpDate={user.signUpDate}
                 actionButton={
                   <AttendEventButton
                     username={user.username}
