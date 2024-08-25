@@ -8,7 +8,7 @@ export default function AppLayout({
     <main className="relative flex flex-col md:flex-row w-dvw h-dvh">
       <NavBar />
       <div className="z-0 flex flex-col w-full md:w-[calc(100dvw-12rem)] h-dvh p-4 md:p-10 pt-20 overflow-auto">
-        <div className="z-20 absolute top-6 right-4 md:right-10">
+        <div className="z-20 absolute top-6 right-4 md:right-6">
           <ProfileBtn />
         </div>
         {children}
