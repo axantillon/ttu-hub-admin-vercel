@@ -20,6 +20,14 @@ export const metadata: Metadata = {
     template: APP_TITLE_TEMPLATE,
   },
   description: APP_DESCRIPTION,
+  icons: {
+    icon: [{ url: "/icons/favicon.ico" }],
+    apple: [
+      { url: "/icons/apple-touch-icon-76x76.png", sizes: "76x76" },
+      { url: "/icons/apple-touch-icon-120x120.png", sizes: "120x120" },
+      { url: "/icons/apple-touch-icon-144x144.png", sizes: "144x144" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
