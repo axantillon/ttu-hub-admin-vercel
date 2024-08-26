@@ -6,7 +6,7 @@ export default async function Users() {
   const users = await getAllUsers();
 
   return (
-    <div className="relative flex flex-col h-full gap-6 p-4 md:p-0">
+    <div className="relative flex flex-col h-full gap-6 ">
       <span className="text-2xl md:text-3xl font-bold">Users</span>
 
       <div className="relative flex flex-col-reverse md:flex-row w-full h-full gap-4 overflow-auto">

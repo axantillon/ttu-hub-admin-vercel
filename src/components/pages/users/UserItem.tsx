@@ -66,7 +66,7 @@ const UserItem: FC<UserItemProps> = ({
           </span>
 
           {!hideBadges ? (
-            <div className="flex flex-wrap gap-1 w-[200px] sm:w-auto">
+            <div className="flex flex-wrap gap-1 w-auto pr-1">
               <div className="flex items-center h-6 px-2 rounded-full bg-black/10">
                 <span className="text-xs leading-none">@{user.username}</span>
               </div>
