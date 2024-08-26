@@ -33,7 +33,7 @@ const AvatarCircles = ({
         </div>
       ))}
       {displayNum > 0 && (
-        <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-black text-center text-xs font-medium text-white dark:border-gray-800 dark:bg-white dark:text-black">
+        <div className="z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-black text-center text-xs font-medium text-white dark:border-gray-800 dark:bg-white dark:text-black">
           +{displayNum}
         </div>
       )}
