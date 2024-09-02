@@ -9,59 +9,60 @@ datasource db {
 }
 
 model User {
-  username   String            @id @unique
-  firstName  String
-  lastName   String
-  profilePic String?
-  major      String
-  minor      String?
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime?         @updatedAt
-  address    String?
-  points     Int               @default(0)
-  events     EventAttendance[]
-  orgs       Org[]             @relation("OrgToUser")
+  firstName       String
+  lastName        String
+  profilePic      String?
+  major           String
+  minor           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime?         @updatedAt
+  address         String?
+  username        String            @id @unique
+  points          Int               @default(0)
+  EventAttendance EventAttendance[]
+  orgs            Org[]             @relation("OrgToUser")
 }
 
 model Event {
-  id          String            @id @default(cuid())
-  name        String
-  description String
-  startTime   DateTime
-  endTime     DateTime?
-  location    String
-  organizer   String
-  category    String
-  coverImg    String?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime?         @updatedAt
-  messages    String[]
-  reward      Int               @default(0)
-  attendees   EventAttendance[]
-  userLimit   Int?
-  closed      Boolean           @default(false)
-}
-
-model EventAttendance {
-  id       String   @id @default(cuid())
-  username String
-  eventId  String
-  signedUp DateTime @default(now())
-  attended Boolean  @default(false)
-  event    Event    @relation(fields: [eventId], references: [id])
-  user     User     @relation(fields: [username], references: [username])
-  @@unique([username, eventId])
+  id              String            @id @default(cuid())
+  name            String
+  description     String
+  startTime       DateTime
+  location        String
+  organizer       String
+  category        String
+  coverImg        String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime?         @updatedAt
+  messages        String[]
+  reward          Int               @default(0)
+  closed          Boolean           @default(false)
+  endTime         DateTime?
+  userLimit       Int?
+  EventAttendance EventAttendance[]
 }
 
 model Org {
-  id          String    @id
+  id          String    @id @default(cuid())
   name        String
   description String?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime?
+  updatedAt   DateTime? @updatedAt
   color       String?
   orgPicture  String?
   officers    Json[]    @default([])
   category    String?
   members     User[]    @relation("OrgToUser")
+}
+
+model EventAttendance {
+  id       String   @id @default(cuid())
+  eventId  String
+  signedUp DateTime @default(now())
+  attended Boolean  @default(false)
+  username String
+  Event    Event    @relation(fields: [eventId], references: [id])
+  User     User     @relation(fields: [username], references: [username])
+
+  @@unique([username, eventId])
 }

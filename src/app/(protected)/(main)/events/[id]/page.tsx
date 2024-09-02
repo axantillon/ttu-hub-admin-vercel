@@ -20,13 +20,15 @@ interface EventPageProps {
 }
 
 const EventPage: FC<EventPageProps> = async ({ params }) => {
-  const event: (Event & { users: User[] }) | null = await getEventById(
+  const event = await getEventById(
     params.id
   );
 
   if (!event) {
     return <div>Event not found</div>;
   }
+
+  const users = event.EventAttendance.map((ea) => ea.User);
 
   return (
     <div className="flex flex-col w-full">
@@ -76,7 +78,7 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
 
           <div className="flex flex-col gap-2 mt-auto">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>{event.users.length} signed up</span>
+              <span>{users.length} signed up</span>
               {event.userLimit && (
                 <>
                   <span>•</span>
@@ -85,12 +87,12 @@ const EventPage: FC<EventPageProps> = async ({ params }) => {
               )}
             </div>
             <div className="flex items-center justify-between gap-2">
-              {event.users && event.users.length !== 0 && (
+              {users && users.length !== 0 && (
                 <Link href={`/events/${event.id}/users`} className="w-fit">
                   <div className="flex items-center w-fit p-2 gap-2 hover:bg-black/25 rounded-xl">
                     <AvatarCircles
-                      numPeople={event.users.length}
-                      avatarUrls={event.users
+                      numPeople={users.length}
+                      avatarUrls={users
                         .slice(0, 3)
                         .map(
                           (user) => user.profilePic || "users/default.jpg"

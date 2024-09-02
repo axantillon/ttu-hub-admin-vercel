@@ -2,58 +2,48 @@
 
 import { sendNewEventEmail, sendUpdateEmail } from "@/components/utils/Email";
 import { revalidatePath } from "next/cache";
-import prisma from "../prisma";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { sanitizePathSegment } from "@/lib/utils"; // Assuming we've moved the sanitization function to a utils file
+import { sanitizePathSegment } from "@/lib/utils";
+import prisma from "../prisma";
 
-export async function getAllEvents(pastEvents: boolean = false) {
+export async function getAllEvents(
+  filter: "future" | "past" | "all" = "future"
+) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const events = await prisma.event.findMany({
     where: {
-      startTime: pastEvents
-        ? {
-            lt: new Date(),
-          }
-        : {
-            gte: new Date(),
-          },
+      startTime: filter === "future" ? { gte: today } : undefined,
+      endTime: filter === "past" ? { lt: today } : undefined,
     },
     include: {
-      attendees: {
+      EventAttendance: {
         include: {
-          user: true,
+          User: {
+            select: { profilePic: true },
+          },
         },
       },
     },
   });
 
-  return events.map(event => ({
-    ...event,
-    users: event.attendees.map(attendance => attendance.user),
-  }));
+  return events;
 }
 
 export async function getEventById(id: string) {
   const event = await prisma.event.findUnique({
-    where: {
-      id,
-    },
+    where: { id },
     include: {
-      attendees: {
+      EventAttendance: {
         include: {
-          user: true,
+          User: true,
         },
       },
     },
   });
 
-  if (event) {
-    return {
-      ...event,
-      users: event.attendees.map(attendance => attendance.user),
-    };
-  }
-
-  return null;
+  return event;
 }
 
 export async function createEvent(
@@ -122,19 +112,19 @@ export async function getEventRewardAndUsersWithAttendance(id: string) {
       id,
     },
     include: {
-      attendees: {
+      EventAttendance: {
         include: {
-          user: true,
+          User: true,
         },
       },
     },
   });
 
   return {
-    users: event?.attendees.map((attendance) => ({
-      ...attendance.user,
+    users: event?.EventAttendance.map((attendance) => ({
+      ...attendance.User,
       attended: attendance.attended,
-      signUpDate: attendance.signedUp, // Include the signup date
+      signUpDate: attendance.signedUp,
     })) || [],
     reward: event?.reward || 0,
   };
@@ -165,18 +155,17 @@ export async function addEventMessage(
         throw new Error("Event not found");
       }
       const emails =
-        event.users.map((user) => `${user.username}@ttu.edu`) || [];
+        event.EventAttendance.map((ea) => `${ea.User.username}@ttu.edu`) || [];
 
       if (emails.length > 0) {
         await sendUpdateEmail(sender, emails, message, event).catch(
-          // Remove the message if email sending fails
           async (e) => {
             console.error("Failed to send email:", e);
             await prisma.event.update({
               where: { id },
               data: {
                 messages: {
-                  set: event?.messages.slice(0, -1), // Remove the last message
+                  set: event?.messages.slice(0, -1),
                 },
               },
             });
@@ -194,7 +183,6 @@ export async function addEventMessage(
 
 export async function removeEventMessage(id: string, messageIndex: number) {
   try {
-    // First, fetch the current event
     const event = await prisma.event.findUnique({
       where: { id },
       select: { messages: true },
@@ -204,18 +192,16 @@ export async function removeEventMessage(id: string, messageIndex: number) {
       throw new Error("Event not found");
     }
 
-    // Remove the message at the specified index
     const updatedMessages = event.messages
       .slice()
-      .reverse() // We need to reverse so that the index matches the index given when rendered in reverse in the UI
+      .reverse()
       .filter((_, index) => index !== messageIndex);
 
-    // Update the event with the new list of messages
     await prisma.event.update({
       where: { id },
       data: {
         messages: {
-          set: updatedMessages.slice().reverse(), // we need to reverse again to preserve original order
+          set: updatedMessages.slice().reverse(),
         },
       },
     });
@@ -241,7 +227,6 @@ export async function deleteEvent(id: string) {
       const sanitizedEventName = sanitizePathSegment(event.name);
       const folderPath = `${sanitizedCategory}/${sanitizedEventName}`;
 
-      // List all files in the folder
       const { data: files, error: listError } = await supabase.storage
         .from(bucket)
         .list(folderPath);
@@ -252,7 +237,6 @@ export async function deleteEvent(id: string) {
       }
 
       if (files && files.length > 0) {
-        // Delete all files in the folder
         const filesToDelete = files.map(file => `${folderPath}/${file.name}`);
         const { error: deleteError } = await supabase.storage
           .from(bucket)

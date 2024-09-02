@@ -3,7 +3,7 @@ import { BackButton } from "@/components/utils/BackButton";
 import { getAllEvents } from "@/db/event";
 
 export default async function PastEvents() {
-  const events = await getAllEvents(true);
+  const events = await getAllEvents("past");
 
   return (
     <div className="relative flex flex-col h-full gap-6">
@@ -23,7 +23,17 @@ export default async function PastEvents() {
                 new Date(a.startTime).getTime() -
                 new Date(b.startTime).getTime()
             )
-            .map((event) => <EventItem event={event} key={event.id} />)
+            .map((event) => (
+              <EventItem 
+                event={{
+                  ...event, 
+                  users: event.EventAttendance.map((ea) => ({
+                    profilePic: ea.User.profilePic || "", 
+                  }))
+                }} 
+                key={event.id} 
+              />
+            ))
         ) : (
           <span>No events</span>
         )}

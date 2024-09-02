@@ -75,7 +75,6 @@ export async function toggleUserAttendEvent(username: string, eventId: string, i
     },
   });
 
-  // Update user's points based on attendance
   if (isAttending) {
     await prisma.user.update({
       where: { username },

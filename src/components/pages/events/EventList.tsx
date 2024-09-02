@@ -1,20 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/shadcn/button";
-import { Event, User } from "@prisma/client";
 import { Grid, List } from "react-feather";
 import { useLocalStorage } from "usehooks-ts";
 import { EventItem } from "./EventItem";
+import { Prisma } from "@prisma/client";
 
-type EventWithUsers = Event & {
-  users: User[];
-};
 
-export default function EventList({ events }: { events: EventWithUsers[] }) {
+export default function EventList({ events }: { events: Prisma.EventGetPayload<{include: {EventAttendance: {include: {User: {select: {profilePic: true}}}}}}>[] }) {
   const [isGridView, setIsGridView] = useLocalStorage("isGridView", false);
 
   const sortedEvents = events.sort(
-    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+    (a, b) => a.startTime.getTime() - b.startTime.getTime()
   );
 
   return (
@@ -42,7 +39,15 @@ export default function EventList({ events }: { events: EventWithUsers[] }) {
       >
         {sortedEvents.length > 0 ? (
           sortedEvents.map((event) => (
-            <EventItem event={event} key={event.id} />
+            <EventItem
+              event={{
+                ...event,
+                users: event.EventAttendance.map((ea) => ({
+                  profilePic: ea.User.profilePic || "",
+                })),
+              }}
+              key={event.id}
+            />
           ))
         ) : (
           <span className="text-gray-500 text-center">No events found</span>

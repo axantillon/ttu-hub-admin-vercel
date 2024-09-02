@@ -9,9 +9,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 interface EventItemProps {
-  event: {
-    users: User[];
-  } & Event;
+  event: Event & { users: {profilePic: string}[] };
 }
 
 export const EventItem: FC<EventItemProps> = ({ event }) => {
