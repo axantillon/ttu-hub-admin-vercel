@@ -20,8 +20,8 @@ export default async function PastEvents() {
           events
             .sort(
               (a, b) =>
-                new Date(a.startTime).getTime() -
-                new Date(b.startTime).getTime()
+                new Date(b.startTime).getTime() -
+                new Date(a.startTime).getTime()
             )
             .map((event) => (
               <EventItem 

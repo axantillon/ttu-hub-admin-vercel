@@ -10,7 +10,6 @@ export async function getAllEvents(
   filter: "future" | "past" | "all" = "future"
 ) {
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
 
   const events = await prisma.event.findMany({
     where: {
