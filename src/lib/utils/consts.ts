@@ -52,6 +52,7 @@ export const AUTHORIZED_EMAILS = [
   "andres.antillon@ttu.edu",
   "studentlife@ttu.edu",
   "mbarzuna@ttu.edu",
+  "adriapac@ttu.edu",
 ];
 
 export const EVENT_CATEGORIES = [
